@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 850px; margin: 20px auto; }
+    
+    /* Dark Blue color code applied to the header */
+    .table-description { color: #00008B; font-weight: bold; margin-bottom: 15px; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th { border-top: 2px solid #000; border-bottom: 2px solid #000; padding: 10px; text-align: left; }
+    td { padding: 8px; border-bottom: 1px solid #eee; }
+    
+    .text-list { margin-bottom: 20px; list-style-type: disc; padding-left: 20px; }
+    .column-m { width: 10%; }
+</style>
+
+
+
+
+
+</head>
+<body>
+<button onclick="goHome()">Home</button>
+
+    <p class="table-description">This table gives, for each delivered aircraft, the cross reference between:</p>
+    <ul class="text-list">
+        <li>The Manufacturing Serial Number (MSN).</li>
+        <li>The Fleet Serial Number (FSN) of the aircraft as known by AIRBUS S.A.S.</li>
+        <li>The registration number of the aircraft as known by AIRBUS S.A.S.</li>
+        <li>The aircraft model.</li>
+    </ul>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="column-m">M<sup>(1)</sup></th>
+                <th>Registration Number</th>
+				<th>MSN</th>
+                <th>FSN</th>
+                <th>Model</th>
+				<th>ENGINE</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+				 <td>XY-AGV</td>
+                <td>01247</td>
+                <td>202</td>
+               <td>319-111</td>
+			   <td>CFM56-5B5/P</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>XY-AGR</td>
+                <td>01791</td>
+                <td>101</td>
+                <td>319-112</td>
+				<td>CFM56-5B6/P</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>XY-ALN</td>
+                <td>02446</td>
+                <td>501</td>
+                <td>319-112</td>
+				<td>CFM56-5B6/P</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>XY-ALJ</td>
+                <td>03242</td>
+                <td>001</td>
+                <td>320-214</td>
+				<td>CFM56-5B4/P</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>XY-ALY</td>
+                <td>03983</td>
+                <td>051</td>
+                <td>319-112</td>
+				<td>CFM56-5B6/3</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>XY-ALZ</td>
+                <td>04038</td>
+                <td>151</td>
+                <td>319-112</td>
+				<td>CFM56-5B6/3</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>XY-ALK</td>
+                <td>05193</td>
+                <td>301</td>
+                <td>319-115</td>
+				<td>CFM56-5B7/3</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>XY-ALT</td>
+                <td>05933</td>
+                <td>003</td>
+                <td>320-214</td>
+				<td>CFM56-5B4/3</td>
+            </tr>
+        </tbody>
+    </table>
+	
+	<script>
+ 
+  function goHome() {
+    window.location.href = "test3.html";
+  }
+  </script>
+
+</body>
+</html>

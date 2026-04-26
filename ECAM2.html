@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECAM UI - Airbus Style</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    /* Note.html ရဲ့ Header အရောင်နဲ့ ဆင်တူအောင် ပြောင်းထားပါတယ် */
+    background: #eef3f9; 
+    color: #0b3d91;
+    display: flex;
+    justify-content: center;
+  }
+
+  .app {
+    max-width: 430px;
+    width: 100%;
+    padding: 12px;
+  }
+
+  header {
+    background: #0b3d91;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    margin: -12px -12px 15px -12px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  /* GRID */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  /* BUTTON - Note.html ရဲ့ Theme နဲ့ ကိုက်အောင် ပြင်ထားတဲ့ Style */
+  .tab {
+    padding: 14px 5px;
+    background: white;
+    border: 2px solid #0b3d91;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #0b3d91;
+    transition: all 0.2s ease;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  .tab:hover {
+    background: #0b3d91;
+    color: white;
+  }
+
+  .tab:active {
+    transform: scale(0.95);
+  }
+</style>
+	<style>
+  .btn-home {
+    background-color: white; /* အပြာရောင် */
+    color: blue;              /* စာသားအဖြူရောင် */
+    padding: 10px 20px;       /* ခလုတ် အကျယ်အဝန်း */
+    border: none;             /* အနားသတ်မျဉ်း ဖျောက်ရန် */
+    border-radius: 5px;       /* ထောင့်လေးတွေ ဝိုင်းရန် */
+    cursor: pointer;          /* Mouse တင်ရင် လက်ညှိုးပုံပြရန် */
+    font-weight: bold;        /* စာသား အထူ */
+  }
+
+  /* Mouse တင်လိုက်တဲ့အခါ အရောင်အနည်းငယ် ပြောင်းလဲစေရန် */
+  .btn-home:hover {
+border-color: #00c8ff;
+    color: #00c8ff;
+  }
+</style>
+<button class="btn-home" onclick="goHome()">Home</button>
+</head>
+
+
+
+<body>
+
+
+  
+
+  <div class="app">
+    <header>
+      <h2>ECAM DISPLAY DISCRIPTION</h2>
+	  
+	  
+
+    </header>
+
+    <div class="tabs">
+	
+      <button class="tab" onclick="goPage('Note2', 'a4')">AIRCOND</button>
+      <button class="tab" onclick="goPage('Note2', 'a6')">PRESS</button>
+      <button class="tab" onclick="goPage('Note2', 'a5')">BLEED</button>
+      <button class="tab" onclick="goPage('Note2', 'd3')">ELEC</button>
+      <button class="tab" onclick="goPage('Note2', 'i2')">HYD</button>
+      <button class="tab" onclick="goPage('Note2', 'h2')">FUEL</button>
+      <button class="tab" onclick="goPage('Note2', 'g2')">FLT CTL</button>
+      <button class="tab" onclick="goPage('Note', 'systemN')">SYSTEM N</button>
+      <button class="tab" onclick="goPage('Note', 'systemO')">SYSTEM O</button>
+    </div>
+  </div>
+  
+  
+
+  <script>
+  
+  function goHome() {
+    window.location.href = "test3.html";
+  }
+    function goPage(page, sectionId) {
+      if (sectionId) {
+        // Note.html#systemD စသဖြင့် လှမ်းသွားပါမယ်
+        window.location.href = page + ".html#" + sectionId;
+      } else {
+        window.location.href = page + ".html";
+      }
+    }
+
+
+
+
+  </script>
+</body>
+</html>

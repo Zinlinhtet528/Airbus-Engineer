@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(145deg, #0d0f15, #1b1f2a, #111520);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            color: white;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 480px;
+            background: rgba(255,255,255,0.05);
+            padding: 18px;
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5),
+                        inset 0 0 12px rgba(255,255,255,0.03);
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            text-align: center;
+            font-size: 14px;
+            color: #e8e8e8;
+        }
+
+        th {
+            background: rgba(255,255,255,0.08);
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            font-weight: bold;
+        }
+
+        td {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            border-right: 1px solid rgba(255,255,255,0.06);
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+            box-sizing: border-box; /* Ensures padding doesn't affect 100% width */
+        }
+
+        input:disabled {
+            background: rgba(255,255,255,0.08);
+            color: #ccc;
+        }
+
+        .button-main {
+            width: 100%;
+            padding: 14px;
+            margin-top: 18px;
+            font-size: 17px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(135deg, #6a00ff, #4e1eff, #3800d6);
+            box-shadow: 0 4px 12px rgba(80,0,255,0.45);
+            cursor: pointer;
+        }
+
+        .button-main:active {
+            transform: scale(0.98);
+        }
+
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 14px;
+            color: white;
+            text-shadow: 0 0 8px #b279ff, 0 0 14px #8a3dff;
+        }
+
+        /* ===== AIRCRAFT / TIME / DUTY SECTION (SIMPLE DARK BLUE PANEL) ===== */
+        .section-title {
+            margin-top: 28px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .toggle-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            background: rgba(15,23,42,0.9);
+            color: #e5e7eb;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.98);
+        }
+
+        .panel {
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 14px;
+            background: rgba(15,23,42,0.8);
+            border: 1px solid rgba(148,163,184,0.5);
+        }
+
+        .panel h2 {
+            font-size: 16px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .row-flex {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .row-flex label {
+            min-width: 65px;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .sub-btn {
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 0;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-primary-mini {
+            background:#2563eb;
+            color:white;
+        }
+
+        .btn-ghost-mini {
+            background:transparent;
+            color:#e5e7eb;
+            border:1px solid #64748b;
+        }
+
+        .result-text {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .aircraft-btn {
+            width: 100%;
+            margin-top: 6px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 0;
+            cursor: pointer;
+            background: #111827;
+            color: #e5e7eb;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .aircraft-btn:hover {
+            background: #1f2937;
+        }
+
+        .aircraft-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .aircraft-table th,
+        .aircraft-table td {
+            border: 1px solid #4b5563;
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        .aircraft-table th {
+            background: #0f172a;
+        }
+
+        .page-mini { display: none; }
+        .page-mini.active { display: block; }
+
+        .back-mini {
+            margin-top: 12px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #64748b;
+            background: transparent;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        /* Duty Roster vertical cards */
+        .duty-result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(148,163,184,0.6);
+            background: rgba(15,23,42,0.7);
+            font-size: 13px;
+            text-align: left;
+        }
+        .shift-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .shift-box {
+            border-radius: 10px;
+            padding: 10px;
+            background: rgba(15,23,42,0.85);
+            border: 1px solid #4b5563;
+        }
+        .shift-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #66c2ff;
+        }
+        .shift-box ul {
+            padding-left: 18px;
+            margin: 0;
+            font-size: 13px;
+        }
+
+        /* NO-GO List Styles */
+        #searchInput {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        #itemList {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(148,163,184,0.5);
+            border-radius: 8px;
+            background: rgba(15,23,42,0.5);
+        }
+        #itemList li {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 13px;
+            text-align: left;
+        }
+        #itemList li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+<button onclick="goHome()">Home</button>
+
+<div class="container" id="appContent">
+
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2">TANK / ENTRY</th>
+                <th colspan="3">FUEL DISTRIBUTION (KG)</th>
+            </tr>
+            <tr>
+                <th>IN TANK</th>
+                <th>ACTUAL UPLIFT</th>
+                <th>DEPARTURE</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>LH</td>
+                <td><input type="number" id="intank_lh"></td>
+                <td><input type="number" id="uplift_lh" disabled></td>
+                <td><input type="number" id="dep_lh"></td>
+            </tr>
+
+            <tr>
+                <td>CENTER</td>
+                <td><input type="number" id="intank_center"></td>
+                <td><input type="number" id="uplift_center" disabled></td>
+                <td><input type="number" id="dep_center"></td>
+            </tr>
+
+            <tr>
+                <td>RH</td>
+                <td><input type="number" id="intank_rh"></td>
+                <td><input type="number" id="uplift_rh" disabled></td>
+                <td><input type="number" id="dep_rh"></td>
+            </tr>
+
+            <tr>
+                <td><b>TOTAL</b></td>
+                <td><input type="number" id="intank_total" disabled></td>
+                <td><input type="number" id="uplift_total" disabled></td>
+                <td><input type="number" id="dep_total" disabled></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <button class="button-main" onclick="calc()">Calculate Fuel</button>
+
+    <table style="margin-top: 25px;">
+        <tbody>
+
+            <tr>
+                <td><b>FUEL SUPPLIER</b></td>
+                <td colspan="3"><input type="text" id="fuel_supplier"></td>
+            </tr>
+
+            <tr>
+                <td><b>RECEPT NO</b></td>
+                <td colspan="3"><input type="text" id="recept_no"></td>
+            </tr>
+
+            <tr>
+                <th colspan="4" style="background:rgba(255,255,255,0.08)">
+                    UPLIFT CONVERSION
+                </th>
+            </tr>
+
+            <tr>
+                <td><b>UPLIFT SG</b></td>
+                <td colspan="3"><input type="number" id="uplift_sg" step="0.0001"></td>
+            </tr>
+
+            <tr>
+                <td><b>LITERS / GALLONS</b></td>
+                <td colspan="3"><input type="number" id="liters_gallons" step="0.0001"></td>
+            </tr>
+
+            <tr>
+                <td><b>RESULT (KG)</b></td>
+                <td colspan="3"><input type="number" id="uplift_kg" disabled></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <button class="button-main" onclick="calcLitre()">Calculate Liters/Gallons</button>
+
+    <h3 class="section-title">Extra Tools</h3>
+    <button class="toggle-btn" onclick="toggleTools()">
+        ✈ Show / Hide Aircraft & Time & Duty
+    </button>
+
+    <div id="toolsPanel" class="panel" style="display:none;">
+
+        <div style="display:flex; gap:8px; margin-bottom:12px; justify-content:center; flex-wrap:wrap;">
+            <button class="sub-btn btn-primary-mini" onclick="showMiniPage('mini-time')">⏱ Time Calc</button>
+            <button class="sub-btn btn-primary-mini" onclick="showMiniPage('mini-aircraft-list')">✈ Aircraft List</button>
+            <button class="sub-btn btn-primary-mini" onclick="showMiniPage('mini-duty')">📋 Duty Roster</button>
+            <button class="sub-btn btn-primary-mini" onclick="showMiniPage('mini-nogo')">🚫 NO-GO</button>
+        </div>
+
+        <div id="mini-time" class="page-mini active">
+            <h2>Hours & Minutes — Add / Subtract</h2>
+
+            <div class="row-flex">
+                <label>Time A</label>
+                <input id="aHours" type="number" placeholder="Hours" />
+                <input id="aMinutes" type="number" placeholder="Minutes" />
+            </div>
+
+            <div class="row-flex">
+                <label>Time B</label>
+                <input id="bHours" type="number" placeholder="Hours" />
+                <input id="bMinutes" type="number" placeholder="Minutes" />
+            </div>
+
+            <div id="extraTimeRows"></div>
+
+            <div class="row-flex" style="justify-content:center;">
+                <button class="sub-btn btn-ghost-mini" onclick="addTimeRow()">➕ Add Table</button>
+            </div>
+
+            <div class="row-flex" style="justify-content:center;">
+                <button class="sub-btn btn-primary-mini" id="addBtn">➕ Add</button>
+                <button class="sub-btn btn-primary-mini" id="subBtn">➖ Subtract</button>
+                <button class="sub-btn btn-ghost-mini" id="clearBtn">Clear</button>
+            </div>
+
+            <div id="result" class="result-text">Result: —</div>
+        </div>
+
+        <div id="mini-aircraft-list" class="page-mini">
+            <h2>Aircraft List</h2>
+
+            <button class="aircraft-btn" onclick="openAircraft('XY-ALK')">XY-ALK</button>
+            <button class="aircraft-btn" onclick="openAircraft('XY-AGR')">XY-AGR</button>
+            <button class="aircraft-btn" onclick="openAircraft('XY-AGV')">XY-AGV</button>
+            <button class="aircraft-btn" onclick="openAircraft('XY-ALJ')">XY-ALJ</button>
+            <button class="aircraft-btn" onclick="openAircraft('XY-ALN')">XY-ALN</button>
+            <button class="aircraft-btn" onclick="openAircraft('XY-ALT')">XY-ALT</button>
+            <button class="aircraft-btn" onclick="openAircraft('XY-ALY')">XY-ALY</button>
+            <button class="aircraft-btn" onclick="openAircraft('XY-ALZ')">XY-ALZ</button>
+        </div>
+
+        <div id="mini-aircraft-info" class="page-mini">
+            <h2 id="aircraft-title">Aircraft</h2>
+            <div id="aircraft-text">Loading…</div>
+            <button class="back-mini" onclick="showMiniPage('mini-aircraft-list')">← Back to List</button>
+        </div>
+
+        <div id="mini-duty" class="page-mini">
+            <h2>Duty Roster System (A, B, C, D)</h2>
+
+            <div class="row-flex" style="justify-content:center;">
+                <button class="sub-btn btn-primary-mini" onclick="showTodayDuty()">Today Duty</button>
+            </div>
+
+            <div class="row-flex" style="justify-content:center;">
+                <label>Date</label>
+                <input type="date" id="userDate">
+                <button class="sub-btn btn-ghost-mini" onclick="showSelectedDateDuty()">Enter</button>
+            </div>
+
+            <div id="output" class="duty-result">
+                <b>Date:</b> —<br><br>
+                <b>Shift A:</b> —<br>
+                <b>Shift B:</b> —<br>
+                <b>Shift C:</b> —<br>
+                <b>Shift D:</b> —<br>
+            </div>
+
+            <h3 style="font-size:14px; margin-top:14px; text-align:left;">Duty Staff List</h3>
+
+            <div class="shift-list">
+                <div class="shift-box">
+                    <div class="shift-title">Shift A</div>
+                    <ul>
+                        <li>Nyein Chan Ag</li>
+                        <li>Ag Thu Shein</li>
+                        <li>Myo Min Han</li>
+                    </ul>
+                </div>
+
+                <div class="shift-box">
+                    <div class="shift-title">Shift B</div>
+                    <ul>
+                        <li>Zayar Ag</li>
+                        <li>Zin Lin Htet</li>
+                        <li>Ag Win Hlaing</li>
+                        <li>Htun Myat Soe</li>
+                    </ul>
+                </div>
+
+                <div class="shift-box">
+                    <div class="shift-title">Shift C</div>
+                    <ul>
+                        <li>Than Htet Win</li>
+                        <li>Ye Ag</li>
+                    </ul>
+                </div>
+
+                <div class="shift-box">
+                    <div class="shift-title">Shift D</div>
+                    <ul>
+                        <li>Hein Min Hlatt</li>
+                        <li>Phyo Ko Ko Hein</li>
+                        <li>Ye Naing Oo</li>
+                        <li>Lin Htain Win</li>
+                        <li>Moe Paing Soe</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="mini-nogo" class="page-mini">
+            <h2>A320 NO-GO Items</h2>
+            <input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Search NO-GO Item...">
+            <ul id="itemList">
+                <li>ATA 21 - CAB PR OFV NOT OPEN</li>
+                <li>ATA 21 - COND L+R CAB FAN FAULT</li>
+                <li>ATA 22 - AUTO FLT FAC 1+2 FAULT</li>
+                <li>ATA 22 - AUTO FLT FCU 1+2 FAULT</li>
+                <li>ATA 22 - AUTO FLT RUD TRIM SYS</li>
+                <li>ATA 22 - AUTO FLT RUD TRV LIM SYS</li>
+                <li>ATA 22 - AUTO FLT YAW DAMPER SYS</li>
+                <li>ATA 23 - COM CIDS 1+2 FAULT</li>
+                <li>ATA 24 - ELEC AC BUS 1 FAULT</li>
+                <li>ATA 24 - ELEC AC BUS 2 FAULT</li>
+                <li>ATA 24 - ELEC AC ESS BUS ALTN</li>
+                <li>ATA 24 - ELEC AC ESS BUS FAULT</li>
+                <li>ATA 24 - ELEC AC ESS BUS SHED</li>
+                <li>ATA 24 - ELEC BAT 1(2) FAULT</li>
+                <li>ATA 24 - ELEC DC BAT BUS FAULT</li>
+                <li>ATA 24 - ELEC DC BUS 1 FAULT</li>
+                <li>ATA 24 - ELEC DC BUS 2 FAULT</li>
+                <li>ATA 24 - ELEC DC BUS 1+2 FAULT</li>
+                <li>ATA 24 - ELEC DC EMER CONFIG</li>
+                <li>ATA 24 - ELEC DC ESS BUS FAULT</li>
+                <li>ATA 24 - ELEC DC ESS BUS SHED</li>
+                <li>ATA 24 - ELEC EMER CONFIG</li>
+                <li>ATA 24 - ELEC ESS BUSSES ON BAT</li>
+                <li>ATA 24 - ELEC STATIC INV FAULT</li>
+                <li>ATA 26 - APU FIRE</li>
+                <li>ATA 26 - AVIONICS SMOKE</li>
+                <li>ATA 26 - ENG 1(2) FIRE</li>
+                <li>ATA 26 - ENG 1(2) FIRE DET FAULT</li>
+                <li>ATA 26 - SMOKE AFT CARGO SMOKE</li>
+                <li>ATA 26 - SMOKE FWD CARGO SMOKE</li>
+                <li>ATA 26 - SMOKE LAVATORY SMOKE</li>
+                <li>ATA 27 - CONFIG L(R) SIDESTICK FAULT</li>
+                <li>ATA 27 - CONFIG PITCH TRIM NOT IN T.O. RANGE</li>
+                <li>ATA 27 - CONFIG RUD TRIM NOT IN T.O. RANGE</li>
+                <li>ATA 27 - CONFIG SLATS(FLAPS) NOT IN T.O. CONFIG</li>
+                <li>ATA 27 - CONFIG SPEED BRK NOT RETRACTED</li>
+                <li>ATA 27 - F/CTL ALTN LAW</li>
+                <li>ATA 27 - F/CTL DIRECT LAW</li>
+                <li>ATA 27 - F/CTL ELAC 2 FAULT</li>
+                <li>ATA 27 - F/CTL ELAC 2 PITCH FAULT</li>
+                <li>ATA 27 - F/CTL ELEV SERVO FAULT</li>
+                <li>ATA 27 - F/CTL FCDC 1 FAULT</li>
+                <li>ATA 27 - F/CTL FCDC 1+2 FAULT</li>
+                <li>ATA 27 - F/CTL FLAP ATTACH SENSOR</li>
+                <li>ATA 27 - F/CTL FLAP SYS 1 FAULT</li>
+                <li>ATA 27 - F/CTL FLAPS(SLATS) FAULT</li>
+                <li>ATA 27 - F/CTL FLAPS(SLATS) LOCKED</li>
+                <li>ATA 27 - F/CTL L(R) AIL FAULT</li>
+                <li>ATA 27 - F/CTL L(R) ELEV FAULT</li>
+                <li>ATA 27 - F/CTL L+R ELEV FAULT</li>
+                <li>ATA 27 - F/CTL L(R) SIDESTICK FAULT</li>
+                <li>ATA 27 - F/CTL SLAT SYS 1 FAULT</li>
+                <li>ATA 27 - F/CTL STABILIZER JAM</li>
+                <li>ATA 28 - FUEL L(R) INNER(OUTER) TK HI TEMP</li>
+                <li>ATA 28 - FUEL L(R) INNER(OUTER) TK LO TEMP</li>
+                <li>ATA 28 - FUEL L(R) TK PUMP 1+2 LO PR</li>
+                <li>ATA 28 - FUEL L(R) WING TK LO LVL</li>
+                <li>ATA 28 - FUEL L+R WING TK LO LVL</li>
+                <li>ATA 28 - FUEL X FEED VALVE FAULT</li>
+                <li>ATA 29 - HYD B ELEC PUMP LO PR</li>
+                <li>ATA 29 - HYD B ELEC PUMP OVHT</li>
+                <li>ATA 29 - HYD B RSVR LO AIR PR</li>
+                <li>ATA 29 - HYD B RSVR LO LVL</li>
+                <li>ATA 29 - HYD B RSVR OVHT</li>
+                <li>ATA 29 - HYD B SYS LO PR</li>
+                <li>ATA 29 - HYD B+G SYS LO PR</li>
+                <li>ATA 29 - HYD B+Y SYS LO PR</li>
+                <li>ATA 29 - HYD G ENG 1 PUMP LO PR</li>
+                <li>ATA 29 - HYD G RSVR LO AIR PR</li>
+                <li>ATA 29 - HYD G RSVR LO LVL</li>
+                <li>ATA 29 - HYD G RSVR OVHT</li>
+                <li>ATA 29 - HYD G SYS LO PR</li>
+                <li>ATA 29 - HYD G+Y SYS LO PR</li>
+                <li>ATA 29 - HYD PTU FAULT</li>
+                <li>ATA 29 - HYD RAT FAULT</li>
+                <li>ATA 29 - HYD Y ENG 2 PUMP LO PR</li>
+                <li>ATA 29 - HYD Y RSVR LO AIR PR</li>
+                <li>ATA 29 - HYD Y RSVR LO LVL</li>
+                <li>ATA 29 - HYD Y RSVR OVHT</li>
+                <li>ATA 29 - HYD Y SYS LO PR</li>
+                <li>ATA 30 - ANTI ICE ALL PITOT</li>
+                <li>ATA 30 - ANTI ICE CAPT+F/O PITOT</li>
+                <li>ATA 30 - ANTI ICE CAPT+STBY PITOT</li>
+                <li>ATA 30 - ANTI ICE F/O+STBY PITOT</li>
+                <li>ATA 30 - ANTI ICE L+R WINDSHIELD</li>
+                <li>ATA 31 - EIS DMC/FWC COM FAULT</li>
+                <li>ATA 31 - FWS FWC 1 FAULT</li>
+                <li>ATA 31 - FWS FWC 1+2 FAULT</li>
+                <li>ATA 31 - FWS OEB/FWC DISCREPANCY</li>
+                <li>ATA 31 - FWS SDAC 1 FAULT</li>
+                <li>ATA 31 - FWS SDAC 1+2 FAULT</li>
+                <li>ATA 32 - BRAKES ALTN BRK FAULT</li>
+                <li>ATA 32 - BRAKES ALTN L(R) RELEASED</li>
+                <li>ATA 32 - BRAKES A/SKID N/WS FAULT</li>
+                <li>ATA 32 - BRAKES BRK Y ACCU LO PR</li>
+                <li>ATA 32 - BRAKES HOT</li>
+                <li>ATA 32 - BRAKES NORM BRK FAULT</li>
+                <li>ATA 32 - BRAKES NORM+ALT FAULT</li>
+                <li>ATA 32 - CONFIG PARK BRK ON</li>
+                <li>ATA 32 - L/G DOORS NOT CLOSED</li>
+                <li>ATA 32 - L/G LGCIU 1 FAULT</li>
+                <li>ATA 32 - L/G SHOCK ABSORBER FAULT</li>
+                <li>ATA 32 - L/G SYS DISAGREE</li>
+                <li>ATA 32 - WHEEL HYD SEL FAULT</li>
+                <li>ATA 32 - WHEEL TYRE LO PR</li>
+                <li>ATA 34 - NAV ADR(1+2)(1+3)(2+3) FAULT</li>
+                <li>ATA 34 - NAV ADR 1+2+3 FAULT</li>
+                <li>ATA 34 - NAV ADR DISAGREE</li>
+                <li>ATA 34 - NAV IR DISAGREE</li>
+                <li>ATA 34 - NAV IR (1+2)(1+3)(2+3) FAULT</li>
+                <li>ATA 36 - AIR APU BLEED LEAK</li>
+                <li>ATA 36 - AIR ENG 1+2 BLEED FAULT</li>
+                <li>ATA 36 - AIR ENG 1(2) BLEED LEAK</li>
+                <li>ATA 36 - AIR L(R) WING LEAK</li>
+                <li>ATA 36 - AIR L(R) WING LEAK DET FAULT</li>
+                <li>ATA 36 - BLEED MONITORING FAULT</li>
+                <li>ATA 70 - ENG TYPE DISAGREE</li>
+                <li>ATA 70 - ENG 1(2) COMPRESSOR VANE</li>
+                <li>ATA 70 - ENG 1+2 COMPRESSOR VANE</li>
+                <li>ATA 70 - ENG 1(2) CTL VALVE FAULT</li>
+                <li>ATA 70 - ENG 1(2) EGT(FF)(N1)(N2) DISCREPANCY</li>
+                <li>ATA 70 - ENG 1(2) EIU FAULT</li>
+                <li>ATA 70 - ENG 1(2) FADEC A(B) FAULT</li>
+                <li>ATA 70 - ENG 1(2) FADEC ALTERNATOR</li>
+                <li>ATA 70 - ENG 1(2) FADEC FAULT</li>
+                <li>ATA 70 - ENG 1(2) FADEC HI TEMP</li>
+                <li>ATA 70 - ENG 1(2) FUEL CTL FAULT</li>
+                <li>ATA 70 - ENG 1(2) FUEL FILTER CLOG</li>
+                <li>ATA 70 - ENG 1(2) HP FUEL VALVE</li>
+                <li>ATA 70 - ENG 1(2) LOW N1</li>
+                <li>ATA 70 - ENG 1(2) OIL FILTER CLOG</li>
+                <li>ATA 70 - ENG 1(2) OIL HI TEMP</li>
+                <li>ATA 70 - ENG 1(2) OIL LO PR</li>
+                <li>ATA 70 - ENG 1(2) OVSPD PROT FAULT</li>
+                <li>ATA 70 - ENG 1(2) PROBES FAULT</li>
+                <li>ATA 70 - ENG 1(2) REV PRESSURIZED</li>
+                <li>ATA 70 - ENG 1(2) REVERSE UNLOCKED</li>
+                <li>ATA 70 - ENG 1(2) SENSOR FAULT</li>
+                <li>ATA 70 - ENG 1(2) THR LEVER DISAGREE</li>
+                <li>ATA 70 - ENG 1(2) THR LEVER FAULT</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer">Coded By Zin Lin Htet</div>
+</div>
+
+<script>
+/* FUEL CALCULATION */
+function calc() {
+    let lh_in = Number(document.getElementById("intank_lh").value);
+    let lh_dep = Number(document.getElementById("dep_lh").value);
+    document.getElementById("uplift_lh").value = lh_dep - lh_in;
+
+    let cen_in = Number(document.getElementById("intank_center").value);
+    let cen_dep = Number(document.getElementById("dep_center").value);
+    document.getElementById("uplift_center").value = cen_dep - cen_in;
+
+    let rh_in = Number(document.getElementById("intank_rh").value);
+    let rh_dep = Number(document.getElementById("dep_rh").value);
+    document.getElementById("uplift_rh").value = rh_dep - rh_in;
+
+    document.getElementById("intank_total").value = lh_in + cen_in + rh_in;
+    document.getElementById("dep_total").value = lh_dep + cen_dep + rh_dep;
+    document.getElementById("uplift_total").value =
+        (lh_dep - lh_in) + (cen_dep - cen_in) + (rh_dep - rh_in);
+}
+
+/* UPLIFT CONVERSION: KG = LITERS * SG */
+function calcLitre() {
+    let sg = Number(document.getElementById("uplift_sg").value);
+    let liter = Number(document.getElementById("liters_gallons").value);
+
+    if (sg === 0 || liter === 0) {
+        document.getElementById("uplift_kg").value = "Error";
+        return;
+    }
+
+    let resultKG = liter * sg;
+    document.getElementById("uplift_kg").value = resultKG.toFixed(4);
+}
+
+/* TOGGLE EXTRA TOOLS PANEL */
+function toggleTools() {
+    const panel = document.getElementById("toolsPanel");
+    panel.style.display = (panel.style.display === "none" || panel.style.display === "") ? "block" : "none";
+}
+
+/* MINI PAGE NAVIGATION (TIME / AIRCRAFT / DUTY / NO-GO) */
+function showMiniPage(id) {
+    document.querySelectorAll('.page-mini').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+/* =============== TIME CALCULATOR LOGIC =============== */
+const el = id => document.getElementById(id);
+
+function toTotalMinutes(h,m){return (Number(h)||0)*60 + (Number(m)||0)}
+function format(total){
+  const s = total<0?'-':'';
+  const a = Math.abs(total);
+  return `${s}${Math.floor(a/60)} hr ${a%60} min`;
+}
+
+/* Add Table (Row Add) */
+let extraRowCount = 0;
+function addTimeRow(){
+  extraRowCount++;
+
+  const row = document.createElement("div");
+  row.className = "row-flex";
+  row.innerHTML = `
+      <label>Row ${extraRowCount}</label>
+      <input type="number" class="extraHours" placeholder="Hours" />
+      <input type="number" class="extraMinutes" placeholder="Minutes" />
+  `;
+  document.getElementById("extraTimeRows").appendChild(row);
+}
+
+/* Add = TimeA + TimeB + (all extra rows) */
+document.getElementById("addBtn").onclick = ()=>{
+  let total =
+    toTotalMinutes(el("aHours").value, el("aMinutes").value) +
+    toTotalMinutes(el("bHours").value, el("bMinutes").value);
+
+  const hrs = document.querySelectorAll(".extraHours");
+  const mins = document.querySelectorAll(".extraMinutes");
+  hrs.forEach((h, i) => {
+    total += toTotalMinutes(h.value, mins[i]?.value);
+  });
+
+  el("result").innerText = "Result: " + format(total);
+};
+
+/* Subtract = TimeA - TimeB - (all extra rows) */
+document.getElementById("subBtn").onclick = ()=>{
+  let total =
+    toTotalMinutes(el("aHours").value, el("aMinutes").value) -
+    toTotalMinutes(el("bHours").value, el("bMinutes").value);
+
+  const hrs = document.querySelectorAll(".extraHours");
+  const mins = document.querySelectorAll(".extraMinutes");
+  hrs.forEach((h, i) => {
+    total -= toTotalMinutes(h.value, mins[i]?.value);
+  });
+
+  el("result").innerText = "Result: " + format(total);
+};
+
+/* Clear = clear originals + remove extra rows */
+document.getElementById("clearBtn").onclick = ()=>{
+  ['aHours','aMinutes','bHours','bMinutes'].forEach(i=>el(i).value="");
+  document.getElementById("extraTimeRows").innerHTML = "";
+  extraRowCount = 0;
+  el("result").innerText="Result: —";
+};
+
+/* =============== AIRCRAFT STATUS (GOOGLE SHEETS) =============== */
+const API_URL = "https://script.google.com/macros/s/AKfycbyzwCimZ50QMaLZH-PDjtPFY-cx9c-oTkhp_FbaHzmYUqx8RgamHI7bDrfEIwR1iLP9/exec";
+
+async function loadStatus(reg){
+  document.getElementById("aircraft-text").innerHTML = "Loading...";
+
+  try {
+    const res = await fetch(API_URL);
+    const rows = await res.json();
+
+    const row = rows.find(r => r[0] === reg);
+    if (!row){
+      document.getElementById("aircraft-text").innerHTML = "No data found";
+      return;
+    }
+
+    document.getElementById("aircraft-text").innerHTML = `
+      <table class="aircraft-table">
+        <tr><th>REG</th><td>${row[0]}</td></tr>
+        <tr><th>Status</th><td>${row[1] || ''}</td></tr>
+        <tr><th>Remarks</th><td>${row[2] || ''}</td></tr>
+        <tr><th>Updated By</th><td>${row[3] || ''}</td></tr>
+        <tr><th>Updated At</th><td>${row[4] || ''}</td></tr>
+      </table>
+
+      <h3 style="margin-top:12px;font-size:14px;">Update Status</h3>
+      <input id="newStatus" type="text" placeholder="Enter status" /><br><br>
+      <input id="newRemarks" type="text" placeholder="Enter remarks" /><br><br>
+      <button class="sub-btn btn-primary-mini" onclick="updateStatus('${row[0]}')">Update</button>
+    `;
+  } catch(e) {
+    document.getElementById("aircraft-text").innerHTML = "Error loading data";
+  }
+}
+
+async function updateStatus(reg){
+  const status = document.getElementById("newStatus").value;
+  const remarks = document.getElementById("newRemarks").value;
+
+  await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({ reg, status, remarks, user: "SYSTEM" })
+  });
+
+  alert("Updated Successfully!");
+  loadStatus(reg);
+}
+
+function openAircraft(name){
+  document.getElementById('aircraft-title').innerText = name;
+  loadStatus(name);
+  showMiniPage('mini-aircraft-info');
+}
+
+/* =============== DUTY ROSTER LOGIC =============== */
+const baseDate = new Date("2025-11-18");
+const rotation = ["Day", "Night", "Off", "H-Duty"];
+
+function getDuty(date) {
+    const diff = Math.floor((date - baseDate) / (1000 * 60 * 60 * 24));
+    const index = ((diff % 4) + 4) % 4;
+
+    return {
+        A: rotation[index],
+        B: rotation[(index + 1) % 4],
+        C: rotation[(index + 2) % 4],
+        D: rotation[(index + 3) % 4]
+    };
+}
+
+function displayDuty(date, duty) {
+    const d = date.toISOString().split('T')[0];
+    document.getElementById("output").innerHTML =
+        `<b>Date:</b> ${d}<br><br>
+         <b>Shift A:</b> ${duty.A}<br>
+         <b>Shift B:</b> ${duty.B}<br>
+         <b>Shift C:</b> ${duty.C}<br>
+         <b>Shift D:</b> ${duty.D}<br>`;
+}
+
+function showTodayDuty() {
+    const today = new Date();
+    displayDuty(today, getDuty(today));
+}
+
+function showSelectedDateDuty() {
+    const val = document.getElementById("userDate").value;
+    if (!val) {
+        alert("Please select a date.");
+        return;
+    }
+    const date = new Date(val);
+    displayDuty(date, getDuty(date));
+}
+
+/* =============== NO-GO SEARCH LOGIC =============== */
+function searchFunction() {
+    let input = document.getElementById("searchInput");
+    let filter = input.value.toUpperCase();
+    let ul = document.getElementById("itemList");
+    let li = ul.getElementsByTagName("li");
+
+    for (let i = 0; i < li.length; i++) {
+        let txtValue = li[i].textContent || li[i].innerText;
+        li[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+    }
+}
+</script>
+<script>
+ 
+  function goHome() {
+    window.location.href = "test3.html";
+  }
+  </script>
+
+</body>
+</html>

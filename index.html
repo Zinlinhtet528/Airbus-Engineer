@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECAM UI</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #050607 0%, #0b1118 100%);
+    color: #cfe8ff;
+    display: flex;
+    justify-content: center;
+  }
+
+  .app {
+    max-width: 430px;
+    width: 100%;
+    padding: 12px;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  /* GRID */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  /* BUTTON */
+  .tab {
+    padding: 14px;
+    background: #0f1720;
+    border: 1px solid #2a3a4d;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #cfe8ff;
+    transition: all 0.2s ease;
+  }
+
+  .tab:hover {
+    border-color: #00c8ff;
+    box-shadow: 0 0 10px #00c8ff55;
+    color: #00c8ff;
+  }
+
+  .tab.active {
+    border-color: #00c8ff;
+    box-shadow: 0 0 12px #00c8ff88;
+    color: #00c8ff;
+  }
+
+  /* CONTROL PANEL */
+  .control {
+    margin-top: 20px;
+    padding: 16px;
+    background: #0f1720;
+    border-radius: 14px;
+    border: 1px solid #2a3a4d;
+  }
+
+  .label h3 {
+    margin: 0;
+    color: #00c8ff;
+  }
+
+  .label span {
+    font-size: 12px;
+    color: #8aa0b5;
+  }
+
+  .adjust {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .adjust button {
+    background: #151c24;
+    border: 1px solid #2a3a4d;
+    color: #cfe8ff;
+    border-radius: 10px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .adjust button:hover {
+    border-color: #00c8ff;
+    color: #00c8ff;
+  }
+
+  .adjust span {
+    color: #00c8ff;
+    font-weight: bold;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .reset {
+    margin-left: auto;
+  }
+</style>
+</head>
+
+<body>
+  <div class="app">
+    <h2>ECAM Navigation</h2>
+    <div class="tabs">
+      <button class="tab" onclick="goPage('Note2')">AIRBUS NOTE</button>
+      <button class="tab" onclick="goPage('MSN')">MSN</button>
+      <button class="tab" onclick="goPage('crew_oxygen')">CREW OXY</button>
+      <button class="tab" onclick="goPage('LINE')">FUEL+NOGO</button>
+      <button class="tab" onclick="goPage('BITE')">BITE</button>
+      <button class="tab" onclick="goPage('ECAM2')">ECAM IND</button>
+      <button class="tab" onclick="goPage('FUEL')">FUEL</button>
+      <button class="tab" onclick="goPage('APU')">APU</button>
+      <button class="tab" onclick="goPage('COND')">COND</button>
+      <button class="tab" onclick="goPage('DOOR')">DOOR</button>
+      <button class="tab" onclick="goPage('WHEEL')">WHEEL</button>
+      <button class="tab" onclick="goPage('FCTL')">F/CTL</button>
+      <button class="tab" onclick="goPage('Flight Phase')">FLT PHASE</button>
+      <button class="tab" onclick="goPage('BITE')">BITE</button>
+      <button class="tab" onclick="goPage('MEL')">MEL</button>
+      <button class="tab" onclick="goPage('Maint STD')">Maint STD</button>
+      <button class="tab" onclick="goPage('VU panel')">VU Panel</button>
+      <button class="tab" onclick="goPage('Antenna')">Antenna</button>
+    </div>
+  </div>
+
+  <script>
+    function goPage(page) {
+      window.location.href = page + ".html";
+    }
+  </script>
+
+
+</body>
+</html>

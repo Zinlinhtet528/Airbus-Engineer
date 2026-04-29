@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Arrival Check - Highlighted List</title>
+    <style>
+        :root {
+            --page-bg: #f0f4f8;
+            /* စာသားနောက်ခံအတွက် Sky Blue အရောင် */
+            --item-bg: #e0f2fe; 
+            --item-checked: #dcfce7;
+            --primary: #0369a1;
+            --text-main: #1e293b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background-color: var(--page-bg);
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        h1 { margin: 0; font-size: 1.2rem; color: var(--primary); }
+
+        .container {
+            padding: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #64748b;
+            margin: 15px 0 8px 5px;
+            text-transform: uppercase;
+        }
+
+        .check-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* တစ်ကြောင်းနဲ့တစ်ကြောင်း ကြားအကွာအဝေး */
+        }
+
+        /* စာသားတစ်ခုချင်းစီရဲ့ Background Style */
+        .check-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--item-bg); /* Sky Blue Background */
+            border-radius: 12px;
+            border: 1px solid #bae6fd;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        /* Check လုပ်ပြီးသွားရင် Background ပြောင်းလဲခြင်း */
+        .check-item:has(input:checked) {
+            background-color: var(--item-checked);
+            border-color: #bbf7d0;
+        }
+
+        .checkbox-wrapper {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            accent-color: #10b981;
+        }
+
+        .label-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        input:checked + .label-text {
+            color: #15803d;
+            text-decoration: line-through;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-bottom: 50px;
+        }
+
+        .end-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
+        }
+    </style>
+</head>
+<body>
+<button onclick="goHome()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';" onmouseup="this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';">Main Check List</button>
+
+    <div class="header">
+        <h1>Pre-Departure Check List</h1>
+    </div>
+
+    <div class="container">
+        <div class="section-tag">Essential</div>
+        <div class="check-list">
+		 <label class="check-item">
+                <input type="checkbox" id="gpu" onchange="update()">
+                <span class="label-text">1.	Battery Voltage Check </span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="gpu" onchange="update()">
+                <span class="label-text">2.	Aircraft Power Up </span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="fuel" onchange="update()">
+                <span class="label-text">3. Ground Lock Remove</span>
+            </label>
+        </div>
+
+     
+        <div class="check-list">
+            <label class="check-item">
+                <input type="checkbox" id="walk" onchange="update()">
+                <span class="label-text">4.	System Status</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="lock" onchange="update()">
+                <span class="label-text">5.	ECAM System Pages Status</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="oil" onchange="update()">
+                <span class="label-text">6.	Oxygen Status</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="slat" onchange="update()">
+                <span class="label-text">7.	DDL (Maintenance Procedure)</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="techlog" onchange="update()">
+                <span class="label-text">8.	Engine Oil </span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="cdl" onchange="update()">
+                <span class="label-text">9.	Fuel Demand</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="ddl" onchange="update()">
+                <span class="label-text">10.	Align Status</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="move" onchange="update()">
+                <span class="label-text">11.	Walk Around Check</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="fan" onchange="update()">
+                <span class="label-text">12.	Fuel Oil Cap (After Refueling)</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="bleed" onchange="update()">
+                <span class="label-text">13.	Both Engine Oil Caps Check</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="ecam" onchange="update()">
+                <span class="label-text">14.	Pre-Departure Entry in Tech Log</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="oxy" onchange="update()">
+                <span class="label-text">15.	Access Door Close Check After Maintenance(ECAM)</span>
+            </label>
+            <label class="check-item">
+                <input type="checkbox" id="wind" onchange="update()">
+                <span class="label-text">16.	Aircraft Movement Door Closed Report</span>
+            </label>
+        </div>
+
+        <div class="footer">
+            <button class="end-btn" onclick="resetAll()">END / RESET</button>
+        </div>
+	<button onclick="goHome()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';" onmouseup="this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';">Main Check List</button>
+    </div>
+
+    <script>
+	function goHome() {
+    window.location.href = "Main Check List.html";
+  }
+        const boxes = document.querySelectorAll('input[type="checkbox"]');
+
+        window.onload = () => {
+            boxes.forEach(box => {
+                box.checked = localStorage.getItem(box.id) === 'true';
+            });
+        };
+
+        function update() {
+            boxes.forEach(box => {
+                localStorage.setItem(box.id, box.checked);
+            });
+        }
+
+        function resetAll() {
+            if(confirm("အားလုံးကို Reset လုပ်မှာ သေချာပါသလား?")) {
+                boxes.forEach(box => {
+                    box.checked = false;
+                    localStorage.removeItem(box.id);
+                });
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+    </script>
+</body>
+</html>

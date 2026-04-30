@@ -1,9 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
+	/* Button Style ကို CSS သီးသန့် ခွဲထုတ်ရေးသားခြင်း */
+        .main-home-btn {
+            background-color: #0284c7;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 4px solid #0369a1;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+            display: inline-block;
+            margin: 10px; /* ဘေးပတ်လည် နေရာလွတ်အတွက် */
+            text-decoration: none;
+            outline: none;
+        }
+
+        /* Mouse နဲ့ ထိလိုက်တဲ့အခါ (Hover) */
+        .main-home-btn:hover {
+            background-color: #0369a1;
+        }
+
+        /* ခလုတ်ကို နှိပ်လိုက်တဲ့အခါ (Active/Click) */
+        .main-home-btn:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+        }
+
+        /* Button ကို ထိပ်ဆုံးမှာ အမြဲရှိနေစေချင်ရင် (Optional) */
+        .header-container {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            display: flex;
+            justify-content: flex-start; /* ခလုတ်ကို ဘယ်ဘက်ကပ်ထားရန် */
+        }
         body {
             margin: 0;
             padding: 20px;
@@ -42,10 +81,9 @@
             font-weight: bold;
         }
 
-        td {
-            padding: 8px;
+       td {
+            padding: 6px 2px; /* Padding လျှော့လိုက်သဖြင့် နံပါတ်များ ပိုပေါ်လာမည် */
             border-bottom: 1px solid rgba(255,255,255,0.10);
-            border-right: 1px solid rgba(255,255,255,0.06);
         }
 
         input {
@@ -278,9 +316,13 @@
         }
     </style>
 </head>
+<!-- ခလုတ်ထည့်သွင်းခြင်း -->
+    <div class="header-container">
+        <button class="main-home-btn" onclick="goHome()">Main</button>
+    </div>
 
 <body>
-<button onclick="goHome()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';" onmouseup="this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';">Main Check List</button>
+
 
 <div class="container" id="appContent">
 

@@ -21,6 +21,8 @@
     </style>
 </head>
 <body>
+<button onclick="goHome()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';" onmouseup="this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';">Main Check List</button>
+    
 
 <div class="header">
     <input type="text" id="searchInput" placeholder="Search Alert (e.g. PACK, VENT, FAC)..." onkeyup="searchMEL()">
@@ -78,49 +80,278 @@
         <div class="content">Refer to <a href="#ref-21-52-01" class="dispatch-link">Item 21-52-01</a> Air Conditioning Pack</div>
     </div>
 
-    <div class="mel-card">
-        <div class="alert-name">AIR PACK 1(2) REGUL FAULT</div>
-        <div class="msn-info">MSN: 01247-01791</div>
+<div class="mel-card">
+    <div class="alert-name">AIR PACK 1(2) REGUL FAULT</div>
+    <div class="msn-info">Applicable to: MSN 02446-05933 </div>
+    <div class="status-grid">
         <div class="label">Aircraft Status / Condition</div>
         <div class="content">
-            - If pack ram air inlet flap affected: <a href="#ref-21-52-02" class="dispatch-link">Item 21-52-02</a><br>
-            - If pack controller/anti-ice affected: <a href="#ref-21-61-02" class="dispatch-link">Item 21-61-02</a><br>
-            - If turbine bypass valve affected: <a href="#ref-21-61-01" class="dispatch-link">Item 21-61-01</a>
+            • If pack outlet temperature affected: <a href="#ref-21-07-01-01" class="dispatch-link">Item 21-07-01-01</a> [cite: 221]<br>
+            • If pack compressor outlet temp affected: <a href="#ref-21-07-01-03" class="dispatch-link">Item 21-07-01-03</a> [cite: 221]<br>
+            • If pack flow sensor affected: <a href="#ref-21-51-03" class="dispatch-link">Item 21-51-03</a> [cite: 221]<br>
+            • If pack flow control valve affected: <a href="#ref-21-52-01" class="dispatch-link">Item 21-52-01</a> [cite: 221]<br>
+            • If pack ram air inlet affected: <a href="#ref-21-52-02" class="dispatch-link">Item 21-52-02</a> [cite: 221]<br>
+            • If turbine bypass valve affected: <a href="#ref-21-61-01" class="dispatch-link">Item 21-61-01</a> [cite: 221]
         </div>
     </div>
+</div>
 
-    <div class="mel-card">
-        <div class="alert-name">CAB PR EXCESS CAB ALT</div>
-        <div class="label">Condition for Dispatch</div><div class="content">NIL / Not related to MEL</div>
+<div class="mel-card">
+    <div class="alert-name">CAB PR EXCESS CAB ALT</div>
+    <div class="msn-info">Applicable to: ALL [cite: 223]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">NIL - Not related to MEL [cite: 224]</div>
+</div>
+
+<div class="mel-card">
+    <div class="alert-name">CAB PR EXCES RESIDUAL PR</div>
+    <div class="msn-info">Applicable to: ALL [cite: 226]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">
+        • Actual alert: Apply ECAM procedure [cite: 227]<br>
+        • False alert: Refer to <a href="#ref-52-10-10" class="dispatch-link">Item 52-10-10</a> [cite: 227]
     </div>
+</div>
 
-    <div class="mel-card">
-        <div class="alert-name">CAB PR EXCES RESIDUAL PR</div>
+<div class="mel-card">
+    <div class="alert-name">CAB PR LDG ELEV FAULT</div>
+    <div class="msn-info">Applicable to: ALL [cite: 236]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to <a href="#ref-21-31-04" class="dispatch-link">Item 21-31-04</a> Landing Elevation Selection AUTO Function [cite: 237]</div>
+</div>
+
+<div class="mel-card">
+    <div class="alert-name">CAB PR LO DIFF PR</div>
+    <div class="msn-info">Applicable to: ALL [cite: 239]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">NIL - Not related to MEL [cite: 240]</div>
+</div>
+
+<div class="mel-card">
+    <div class="alert-name">CAB PR OFV NOT OPEN</div>
+    <div class="msn-info">Applicable to: ALL [cite: 242]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content" style="color: #d93025; font-weight: bold;">NO DISPATCH </div>
+</div>
+
+<div class="mel-card">
+    <div class="alert-name">CAB PR SAFETY VALVE OPEN</div>
+    <div class="msn-info">Applicable to: ALL [cite: 245]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">
+        • Actual alert: Refer to FCOM/PRO-NOR-SUP-MISC-E (Flight Without Cabin Pressurization) [cite: 246]<br>
+        • False alert: Refer to <a href="#ref-21-09-03" class="dispatch-link">Item 21-09-03</a> [cite: 246]
+    </div>
+</div>
+
+<div class="mel-card">
+    <div class="alert-name">CAB PR SYS 1(2) FAULT</div>
+    <div class="msn-info">Applicable to: ALL [cite: 254]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to <a href="#ref-21-31-01" class="dispatch-link">Item 21-31-01</a> Automatic Cabin Pressure Control System [cite: 255]</div>
+</div>
+
+<div class="mel-card">
+    <div class="alert-name">CAB PR SYS 1+2 FAULT</div>
+    <div class="msn-info">Applicable to: ALL [cite: 257]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to FCOM/PRO-NOR-SUP-MISC-E (Flight Without Cabin Pressurization) [cite: 258]</div>
+</div>
+
+<div class="mel-card">
+    <div class="alert-name">COND AFT CAB DUCT OVHT</div>
+    <div class="msn-info">Applicable to: ALL [cite: 260]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to <a href="#ref-21-63-02" class="dispatch-link">Item 21-63-02</a> Cockpit and Cabin Trim Air Valve [cite: 261]</div>
+</div>
+
+<div class="mel-card">
+    <div class="alert-name">COND AFT CARGO DUCT OVHT</div>
+    <div class="msn-info">MSN: 01791, 03983-04038 </div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to <a href="#ref-21-43-02" class="dispatch-link">Item 21-43-02</a> AFT Cargo Compartment Heating [cite: 265]</div>
+</div>
+<!-- ATA 21 - AIR CONDITIONING & VENTILATION (CONTINUED) -->
+<div class="section-title">21 - AIR CONDITIONING & VENTILATION (PART 3)</div>
+
+<!-- COND AFT CRG ISOL VALVE -->
+<div class="mel-card">
+    <div class="alert-name">COND AFT CRG ISOL VALVE</div>
+    <div class="msn-info">Applicable to: MSN 01247-01791, 03983-04038, 05933[cite: 3]</div>
+    <div class="label">Aircraft Status</div><div class="content">NIL[cite: 3]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to <a href="#ref-21-28-04" class="dispatch-link">Item 21-28-04</a> AFT Cargo Isolation Valve[cite: 3]</div>
+</div>
+
+<!-- COND CKPT / FWD CAB DUCT OVHT -->
+<div class="mel-card">
+    <div class="alert-name">COND CKPT DUCT OVHT / COND FWD CAB DUCT OVHT</div>
+    <div class="msn-info">Applicable to: ALL[cite: 3]</div>
+    <div class="label">Aircraft Status</div><div class="content">NIL[cite: 3]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to <a href="#ref-21-63-02" class="dispatch-link">Item 21-63-02</a> Cockpit and Cabin Trim Air Valve[cite: 3]</div>
+</div>
+
+<!-- COND FWD CRG ISOL VALVE -->
+<div class="mel-card">
+    <div class="alert-name">COND FWD CRG ISOL VALVE</div>
+    <div class="msn-info">Applicable to: MSN 01247, 05193[cite: 3]</div>
+    <div class="label">Aircraft Status</div><div class="content">NIL[cite: 3]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to <a href="#ref-21-28-02" class="dispatch-link">Item 21-28-02</a> FWD Cargo Isolation Valve[cite: 3]</div>
+</div>
+
+<!-- COND HOT AIR FAULT (MSN Specific - 1) -->
+<div class="mel-card">
+    <div class="alert-name">COND HOT AIR FAULT</div>
+    <div class="msn-info">Applicable to: MSN 01247-01791[cite: 4]</div>
+    <div class="status-grid">
         <div class="label">Condition for Dispatch</div>
         <div class="content">
-            - Actual alert: Apply ECAM procedure<br>
-            - False alert: <a href="#ref-52-10-10" class="dispatch-link">Item 52-10-10</a>
+            • If COND TRIM AIR SYS FAULT not displayed on EWD: Refer to <a href="#ref-21-63-03" class="dispatch-link">Item 21-63-03</a> Hot Air Pressure Regulating Valve[cite: 4]<br>
+            • If COND TRIM AIR SYS FAULT displayed on EWD: Refer to <a href="#ref-21-63-02" class="dispatch-link">Item 21-63-02</a> Cockpit and Cabin Trim Air Valve[cite: 4]
         </div>
     </div>
+</div>
 
-    <div class="mel-card">
-        <div class="alert-name">CAB PR OFV NOT OPEN</div>
-        <div class="label">Condition for Dispatch</div><div class="content" style="color:red; font-weight:bold;">NO DISPATCH</div>
+<!-- COND HOT AIR FAULT (MSN Specific - 2) -->
+<div class="mel-card">
+    <div class="alert-name">COND HOT AIR FAULT</div>
+    <div class="msn-info">Applicable to: MSN 02446-05933[cite: 4]</div>
+	  <div class="label">Aircraft Status</div><div class="content">NIL</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to <a href="#ref-21-63-03" class="dispatch-link">Item 21-63-03</a> Hot Air Pressure Regulating Valve[cite: 4]</div>
+</div>
+
+<!-- COND L+R CAB FAN FAULT -->
+<div class="mel-card">
+    <div class="alert-name">COND L+R CAB FAN FAULT</div>
+    <div class="msn-info">Applicable to: ALL[cite: 4]</div>
+	  <div class="label">Aircraft Status</div><div class="content">NIL</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content" style="color: #d93025; font-weight: bold;">NO DISPATCH[cite: 4]</div>
+</div>
+
+<!-- COND LAV+GALLEY FAN FAULT -->
+<div class="mel-card">
+    <div class="alert-name">COND LAV+GALLEY FAN FAULT</div>
+    <div class="msn-info">Applicable to: ALL[cite: 4]</div>
+	  <div class="label">Aircraft Status</div><div class="content">NIL</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">Refer to <a href="#ref-21-23-01" class="dispatch-link">Item 21-23-01</a> Lavatory and Galley Extraction Fan[cite: 4]</div>
+</div>
+
+<!-- COND TRIM AIR SYS FAULT -->
+<div class="mel-card">
+    <div class="alert-name">COND TRIM AIR SYS FAULT</div>
+    <div class="msn-info">Applicable to: ALL[cite: 4]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content" style="font-size: 13px;">
+        • If trim air valves are closed: Not related to MEL[cite: 4]<br>
+        • Associated with AFT CAB / FWD CAB / CKPT TRIM VALVE subtitle: Refer to <a href="#ref-21-63-02" class="dispatch-link">Item 21-63-02</a>[cite: 4]<br>
+        • Associated with TRIM AIR HI PR subtitle: Refer to <a href="#ref-21-63-03" class="dispatch-link">Item 21-63-03</a>[cite: 4]
     </div>
+</div>
 
-    <div class="mel-card">
-        <div class="alert-name">COND L+R CAB FAN FAULT</div>
-        <div class="label">Condition for Dispatch</div><div class="content" style="color:red; font-weight:bold;">NO DISPATCH</div>
+<!-- COND ZONE REGUL FAULT -->
+<div class="mel-card">
+    <div class="alert-name">COND ZONE REGUL FAULT</div>
+    <div class="msn-info">Applicable to: MSN 01247-01791[cite: 4]</div>
+    <div class="label">Condition for Dispatch</div>
+    <div class="content">
+        • If CAB ZONE AT FIXED TEMP STATUS info displayed on STATUS SD: Refer to <a href="#ref-21-63-01A" class="dispatch-link">Item 21-63-01A</a> Zone Controller Channel[cite: 4]<br>
+        • If PACKS AT FIXED TEMP STATUS info displayed on STATUS SD: Refer to <a href="#ref-21-63-01C" class="dispatch-link">Item 21-63-01C</a> Zone Controller Channel[cite: 4]
     </div>
+</div>
 
-    <div class="mel-card">
-        <div class="alert-name">VENT BLOWER / EXTRACT FAULT</div>
+<!-- VENT AVNCS SYS FAULT -->
+<div class="mel-card">
+    <div class="alert-name">VENT AVNCS SYS FAULT</div>
+    <div class="msn-info">Applicable to: ALL[cite: 4]</div>
+    <div class="label">Condition for Dispatch (Specific Component)</div>
+    <div class="content" style="font-size: 13px;">
+        • If the avionics Skin air outlet valve affected: <a href="#ref-21-26-04" class="dispatch-link">21-26-04</a>[cite: 4]<br>
+        • If the avionics Skin air inlet valve affected: <a href="#ref-21-26-05" class="dispatch-link">21-26-05</a>[cite: 4]<br>
+        • If the avionics Skin exchanger inlet bypass valve affected: <a href="#ref-21-26-03" class="dispatch-link">21-26-03</a>[cite: 4]<br>
+        • If the avionics Skin exchanger outlet bypass valve affected: <a href="#ref-21-26-07" class="dispatch-link">21-26-07</a>[cite: 4]<br>
+        • If the avionics Air conditioning inlet valve affected: <a href="#ref-21-26-08" class="dispatch-link">21-26-08</a>[cite: 4]<br>
+        • If the avionics Skin exchanger isolation valve affected: <a href="#ref-21-26-06" class="dispatch-link">21-26-06</a>[cite: 4]
+    </div>
+</div>
+
+<!-- VENT AVNCS AEVC -->
+<div class="mel-card">
+    <div class="alert-name">VENT AVNCS SYS FAULT (AEVC)</div>
+    <div class="msn-info">Applicable to: ALL</div>
+    <div class="status-grid">
+        <div class="label">Aircraft Status</div>
+        <div class="content">If the Avionics Equipment Ventilation Computer (AEVC) is affected.</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">Refer to <a href="#ref-21-26-10" class="dispatch-link">Item 21-26-10</a> Avionics Equipment Ventilation Computer (AEVC)</div>
+    </div>
+</div>
+
+<!-- VENT BLOWER FAULT -->
+<div class="mel-card">
+    <div class="alert-name">VENT BLOWER FAULT</div>
+    <div class="msn-info">Applicable to: ALL</div>
+    <div class="status-grid">
+        <div class="label">Aircraft Status</div>
+        <div class="content">
+            • Actual alert<br>
+            • False alert
+        </div>
         <div class="label">Condition for Dispatch</div>
         <div class="content">
-            - Blower Actual: <a href="#ref-21-26-01" class="dispatch-link">Item 21-26-01</a><br>
-            - Extract Actual: <a href="#ref-21-26-02" class="dispatch-link">Item 21-26-02</a>
+            • Actual: Refer to <a href="#ref-21-26-01" class="dispatch-link">Item 21-26-01</a> Avionics Blower Fan<br>
+            • False: Refer to <a href="#ref-21-09-01" class="dispatch-link">Item 21-09-01</a> VENT BLOWER FAULT Alert
         </div>
     </div>
+</div>
+
+<!-- VENT EXTRACT FAULT -->
+<div class="mel-card">
+    <div class="alert-name">VENT EXTRACT FAULT</div>
+    <div class="msn-info">Applicable to: ALL</div>
+    <div class="status-grid">
+        <div class="label">Aircraft Status</div>
+        <div class="content">
+            • Actual alert<br>
+            • False alert
+        </div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">
+            • Actual: Refer to <a href="#ref-21-26-02" class="dispatch-link">Item 21-26-02</a> Avionics Extract Fan<br>
+            • False: Refer to <a href="#ref-21-09-02" class="dispatch-link">Item 21-09-02</a> VENT EXTRACT FAULT Alert
+        </div>
+    </div>
+</div>
+
+<!-- VENT SKIN VALVE FAULT -->
+<div class="mel-card">
+    <div class="alert-name">VENT SKIN VALVE FAULT</div>
+    <div class="msn-info">Applicable to: ALL</div>
+    <div class="status-grid">
+        <div class="label">Aircraft Status</div>
+        <div class="content">
+            • Outlet valve determined faulty on the CAB PRESS SD page<br>
+            • Inlet valve determined faulty on the CAB PRESS SD page
+        </div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">
+            • Outlet Valve: Refer to <a href="#ref-21-26-04" class="dispatch-link">Item 21-26-04</a> Avionics Skin Air Outlet Valve<br>
+            • Inlet Valve: Refer to <a href="#ref-21-26-05" class="dispatch-link">Item 21-26-05</a> Avionics Skin Air Inlet Valve
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
 
     <!-- ATA 22 - AUTO FLIGHT -->
     <div class="section-title">22 - AUTO FLIGHT</div>
@@ -159,6 +390,8 @@
     <div id="ref-21-26-01"><b>21-26-01:</b> Avionics Blower Fan Detail</div>
     <div id="ref-22-60-01"><b>22-60-01:</b> FAC 1 System Detail</div>
 </div>
+<button onclick="goHome()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';" onmouseup="this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';">Main Check List</button>
+    
 
 <script>
 function searchMEL() {
@@ -169,6 +402,11 @@ function searchMEL() {
         cards[i].style.display = text.indexOf(input) > -1 ? "" : "none";
     }
 }
+ 
+	function goHome() {
+    window.location.href = "index.html";
+  }
+     
 </script>
 
 </body>

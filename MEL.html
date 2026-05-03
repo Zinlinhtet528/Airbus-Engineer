@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A320 MEL - ATA 21 & 22</title>
+    <style>
+        :root { --primary: #1a73e8; --bg: #f8f9fa; --card: #ffffff; --text: #202124; --warning: #d93025; }
+        body { font-family: sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 10px; line-height: 1.4; }
+        .header { position: sticky; top: 0; background: var(--bg); padding: 10px 0; z-index: 100; }
+        #searchInput { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; box-sizing: border-box; }
+        #searchInput:focus { border-color: var(--primary); }
+        .section-title { background: #333; color: white; padding: 8px 12px; border-radius: 4px; margin: 20px 0 10px; font-size: 14px; }
+        .mel-card { background: var(--card); border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border-left: 4px solid var(--primary); }
+        .alert-name { color: var(--warning); font-weight: bold; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 10px; }
+        .label { font-size: 11px; color: #70757a; text-transform: uppercase; font-weight: bold; }
+        .content { font-size: 14px; margin-bottom: 8px; }
+        .dispatch-link { color: var(--primary); text-decoration: none; font-weight: 500; background: #e8f0fe; padding: 2px 4px; border-radius: 3px; }
+        .msn-info { font-size: 11px; color: #555; background: #eee; padding: 2px 6px; border-radius: 10px; display: inline-block; margin-bottom: 8px; }
+        .ref-section { margin-top: 40px; padding: 15px; border-top: 2px solid #ccc; background: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <input type="text" id="searchInput" placeholder="Search Alert (e.g. PACK, VENT, FAC)..." onkeyup="searchMEL()">
+</div>
+
+<div id="melContainer">
+    <!-- ATA 21 - AIR CONDITIONING -->
+    <div class="section-title">21 - AIR CONDITIONING</div>
+
+    <div class="mel-card">
+        <div class="alert-name">AIR AFT CRG VENT FAULT</div>
+        <div class="msn-info">MSN: 01247-01791, 03983-04038, 05933</div>
+        <div class="label">Aircraft Status</div><div class="content">NIL</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">Refer to <a href="#ref-21-28-03" class="dispatch-link">Item 21-28-03</a> AFT Cargo Extraction Fan</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">AIR COND CTL 1(2)-A(B) FAULT</div>
+        <div class="msn-info">MSN: 02446-05933</div>
+        <div class="label">Aircraft Status</div><div class="content">NIL</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">Refer to <a href="#ref-21-63-04" class="dispatch-link">Item 21-63-04</a> Air Conditioning System Controller Channel</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">AIR FWD CRG VENT FAULT</div>
+        <div class="msn-info">MSN: 01247, 05193</div>
+        <div class="label">Aircraft Status</div><div class="content">NIL</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">Refer to <a href="#ref-21-28-01" class="dispatch-link">Item 21-28-01</a> FWD Cargo Extraction Fan</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">AIR PACK 1(2) FAULT</div>
+        <div class="msn-info">MSN: ALL</div>
+        <div class="label">Aircraft Status</div><div class="content">NIL</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">Refer to <a href="#ref-21-52-01" class="dispatch-link">Item 21-52-01</a> Air Conditioning Pack</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">AIR PACK 1+2 FAULT</div>
+        <div class="msn-info">MSN: ALL</div>
+        <div class="label">Aircraft Status</div><div class="content">NIL</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">Refer to <a href="#ref-21-52-01H" class="dispatch-link">Item 21-52-01H</a> Air Conditioning Pack</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">AIR PACK 1(2) OFF / OVHT</div>
+        <div class="msn-info">MSN: ALL</div>
+        <div class="label">Aircraft Status</div><div class="content">NIL</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">Refer to <a href="#ref-21-52-01" class="dispatch-link">Item 21-52-01</a> Air Conditioning Pack</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">AIR PACK 1(2) REGUL FAULT</div>
+        <div class="msn-info">MSN: 01247-01791</div>
+        <div class="label">Aircraft Status / Condition</div>
+        <div class="content">
+            - If pack ram air inlet flap affected: <a href="#ref-21-52-02" class="dispatch-link">Item 21-52-02</a><br>
+            - If pack controller/anti-ice affected: <a href="#ref-21-61-02" class="dispatch-link">Item 21-61-02</a><br>
+            - If turbine bypass valve affected: <a href="#ref-21-61-01" class="dispatch-link">Item 21-61-01</a>
+        </div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">CAB PR EXCESS CAB ALT</div>
+        <div class="label">Condition for Dispatch</div><div class="content">NIL / Not related to MEL</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">CAB PR EXCES RESIDUAL PR</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">
+            - Actual alert: Apply ECAM procedure<br>
+            - False alert: <a href="#ref-52-10-10" class="dispatch-link">Item 52-10-10</a>
+        </div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">CAB PR OFV NOT OPEN</div>
+        <div class="label">Condition for Dispatch</div><div class="content" style="color:red; font-weight:bold;">NO DISPATCH</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">COND L+R CAB FAN FAULT</div>
+        <div class="label">Condition for Dispatch</div><div class="content" style="color:red; font-weight:bold;">NO DISPATCH</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">VENT BLOWER / EXTRACT FAULT</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">
+            - Blower Actual: <a href="#ref-21-26-01" class="dispatch-link">Item 21-26-01</a><br>
+            - Extract Actual: <a href="#ref-21-26-02" class="dispatch-link">Item 21-26-02</a>
+        </div>
+    </div>
+
+    <!-- ATA 22 - AUTO FLIGHT -->
+    <div class="section-title">22 - AUTO FLIGHT</div>
+
+    <div class="mel-card">
+        <div class="alert-name">AUTO FLT A/THR OFF</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">Refer to <a href="#ref-22-30-01" class="dispatch-link">Item 22-30-01</a> Autothrust</div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">AUTO FLT AP OFF</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">
+            - Actual: <a href="#ref-22-10-01" class="dispatch-link">Item 22-10-01</a><br>
+            - False: <a href="#ref-22-10-06" class="dispatch-link">Item 22-10-06</a>
+        </div>
+    </div>
+
+    <div class="mel-card">
+        <div class="alert-name">AUTO FLT FAC 1(2) FAULT</div>
+        <div class="label">Condition for Dispatch</div>
+        <div class="content">
+            - FAC 1: <a href="#ref-22-60-01" class="dispatch-link">Item 22-60-01</a><br>
+            - FAC 2: <a href="#ref-22-60-02" class="dispatch-link">Item 22-60-02</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- Linked Detail Section -->
+<div class="ref-section">
+    <h3>References & Details</h3>
+    <div id="ref-21-28-03"><b>21-28-03:</b> AFT Cargo Extraction Fan Detail</div>
+    <div id="ref-21-52-01"><b>21-52-01:</b> Air Conditioning Pack Detail</div>
+    <div id="ref-21-26-01"><b>21-26-01:</b> Avionics Blower Fan Detail</div>
+    <div id="ref-22-60-01"><b>22-60-01:</b> FAC 1 System Detail</div>
+</div>
+
+<script>
+function searchMEL() {
+    let input = document.getElementById('searchInput').value.toUpperCase();
+    let cards = document.getElementsByClassName('mel-card');
+    for (let i = 0; i < cards.length; i++) {
+        let text = cards[i].innerText.toUpperCase();
+        cards[i].style.display = text.indexOf(input) > -1 ? "" : "none";
+    }
+}
+</script>
+
+</body>
+</html>

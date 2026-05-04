@@ -3,410 +3,857 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A320 MEL - ATA 21 & 22</title>
+    <title>MEL Maintenance Search</title>
     <style>
-        :root { --primary: #1a73e8; --bg: #f8f9fa; --card: #ffffff; --text: #202124; --warning: #d93025; }
-        body { font-family: sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 10px; line-height: 1.4; }
-        .header { position: sticky; top: 0; background: var(--bg); padding: 10px 0; z-index: 100; }
-        #searchInput { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; box-sizing: border-box; }
-        #searchInput:focus { border-color: var(--primary); }
-        .section-title { background: #333; color: white; padding: 8px 12px; border-radius: 4px; margin: 20px 0 10px; font-size: 14px; }
-        .mel-card { background: var(--card); border-radius: 10px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border-left: 4px solid var(--primary); }
-        .alert-name { color: var(--warning); font-weight: bold; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 10px; }
-        .label { font-size: 11px; color: #70757a; text-transform: uppercase; font-weight: bold; }
-        .content { font-size: 14px; margin-bottom: 8px; }
-        .dispatch-link { color: var(--primary); text-decoration: none; font-weight: 500; background: #e8f0fe; padding: 2px 4px; border-radius: 3px; }
-        .msn-info { font-size: 11px; color: #555; background: #eee; padding: 2px 6px; border-radius: 10px; display: inline-block; margin-bottom: 8px; }
-        .ref-section { margin-top: 40px; padding: 15px; border-top: 2px solid #ccc; background: #fff; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            padding: 10px;
+            background-color: #f0f2f5;
+        }
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .search-container {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #003366;
+            border-radius: 25px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            outline: none;
+        }
+        .item-container {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .item-title {
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .item-code-header {
+            display: inline-block;
+            background: #ffebee;
+            color: #b71c1c;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .ident-info {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .table-responsive { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th { background: #f8f9fa; }
+        .footer-note {
+            font-style: italic;
+            font-size: 0.85rem;
+            color: #444;
+            padding: 8px;
+            background: #f1f8ff;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        #noResult {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
-<button onclick="goHome()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';" onmouseup="this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';">Main Check List</button>
-    
 
 <div class="header">
-    <input type="text" id="searchInput" placeholder="Search Alert (e.g. PACK, VENT, FAC)..." onkeyup="searchMEL()">
+    <strong>MAI - A318/A319/A320/A321</strong>
+    <div style="font-size: 0.9rem;">MINIMUM EQUIPMENT LIST</div>
 </div>
 
-<div id="melContainer">
-    <!-- ATA 21 - AIR CONDITIONING -->
-    <div class="section-title">21 - AIR CONDITIONING</div>
+<div class="search-container">
+    <input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Search Item, Title or Message...">
+</div>
 
-    <div class="mel-card">
-        <div class="alert-name">AIR AFT CRG VENT FAULT</div>
-        <div class="msn-info">MSN: 01247-01791, 03983-04038, 05933</div>
-        <div class="label">Aircraft Status</div><div class="content">NIL</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">Refer to <a href="#ref-21-28-03" class="dispatch-link">Item 21-28-03</a> AFT Cargo Extraction Fan</div>
+<div id="itemList">
+    <!-- Item 21-00-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-00-01: PACK 1(2) MAINTENANCE Message</div>
+        <div class="ident-info">
+            Ident: MI-21-00-00007458.0001001/22 MAR 10<br>
+            Applicable to: MSN 01247-01791
+        </div>
+        <div class="item-code-header">21-00-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>-</td><td>-</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">PACK 1(2) MAINTENANCE message may be displayed on the STATUS SD page.</div>
     </div>
 
-    <div class="mel-card">
-        <div class="alert-name">AIR COND CTL 1(2)-A(B) FAULT</div>
-        <div class="msn-info">MSN: 02446-05933</div>
-        <div class="label">Aircraft Status</div><div class="content">NIL</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">Refer to <a href="#ref-21-63-04" class="dispatch-link">Item 21-63-04</a> Air Conditioning System Controller Channel</div>
+    <!-- Item 21-00-02 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-00-02: ZONE CONT MAINTENANCE Message</div>
+        <div class="ident-info">
+            Ident: MI-21-00-00007459.0002001/22 MAR 10<br>
+            Applicable to: MSN 01247-01791
+        </div>
+        <div class="item-code-header">21-00-02A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>-</td><td>-</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">ZONE CONT MAINTENANCE message may be displayed on the STATUS SD page.</div>
     </div>
 
-    <div class="mel-card">
-        <div class="alert-name">AIR FWD CRG VENT FAULT</div>
-        <div class="msn-info">MSN: 01247, 05193</div>
-        <div class="label">Aircraft Status</div><div class="content">NIL</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">Refer to <a href="#ref-21-28-01" class="dispatch-link">Item 21-28-01</a> FWD Cargo Extraction Fan</div>
+    <!-- Item 21-00-03 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-00-03: AFT CRG HEAT MAINTENANCE Message</div>
+        <div class="ident-info">
+            Ident: MI-21-00-00007460.0001001/22 MAR 10<br>
+            Applicable to: MSN 01791, 03983-04038
+        </div>
+        <div class="item-code-header">21-00-03A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>-</td><td>-</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">AFT CRG HEAT MAINTENANCE message may be displayed on the STATUS SD page.</div>
     </div>
 
-    <div class="mel-card">
-        <div class="alert-name">AIR PACK 1(2) FAULT</div>
-        <div class="msn-info">MSN: ALL</div>
-        <div class="label">Aircraft Status</div><div class="content">NIL</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">Refer to <a href="#ref-21-52-01" class="dispatch-link">Item 21-52-01</a> Air Conditioning Pack</div>
+    <!-- Item 21-00-04 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-00-04: TEMP CTL 1(2) MAINTENANCE Message</div>
+        <div class="ident-info">
+            Ident: MI-21-00-00007461.0001001/22 MAR 10<br>
+            Applicable to: MSN 02446-05933
+        </div>
+        <div class="item-code-header">21-00-04A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>-</td><td>-</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">TEMP CTL 1(2) MAINTENANCE message may be displayed on the STATUS SD page.</div>
     </div>
 
-    <div class="mel-card">
-        <div class="alert-name">AIR PACK 1+2 FAULT</div>
-        <div class="msn-info">MSN: ALL</div>
-        <div class="label">Aircraft Status</div><div class="content">NIL</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">Refer to <a href="#ref-21-52-01H" class="dispatch-link">Item 21-52-01H</a> Air Conditioning Pack</div>
+    <!-- Item 21-00-05 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-00-05: CPC 1(2) MAINTENANCE Message</div>
+        <div class="ident-info">
+            Ident: MI-21-00-00022201.0003001/22 MAY 19<br>
+            Applicable to: MSN 05933
+        </div>
+        <div class="item-code-header">21-00-05A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>-</td><td>-</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">CPC 1(2) MAINTENANCE message may be displayed on the STATUS SD page.</div>
     </div>
 
-    <div class="mel-card">
-        <div class="alert-name">AIR PACK 1(2) OFF / OVHT</div>
-        <div class="msn-info">MSN: ALL</div>
-        <div class="label">Aircraft Status</div><div class="content">NIL</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">Refer to <a href="#ref-21-52-01" class="dispatch-link">Item 21-52-01</a> Air Conditioning Pack</div>
+
+<!-- Item 21-01-01-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-01-01-01: PACK pb-sw FAULT light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-01-00007462.0001001/22 MAR 10 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-01-01-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or both may be inoperative. </div>
     </div>
 
-<div class="mel-card">
-    <div class="alert-name">AIR PACK 1(2) REGUL FAULT</div>
-    <div class="msn-info">Applicable to: MSN 02446-05933 </div>
-    <div class="status-grid">
-        <div class="label">Aircraft Status / Condition</div>
-        <div class="content">
-            • If pack outlet temperature affected: <a href="#ref-21-07-01-01" class="dispatch-link">Item 21-07-01-01</a> [cite: 221]<br>
-            • If pack compressor outlet temp affected: <a href="#ref-21-07-01-03" class="dispatch-link">Item 21-07-01-03</a> [cite: 221]<br>
-            • If pack flow sensor affected: <a href="#ref-21-51-03" class="dispatch-link">Item 21-51-03</a> [cite: 221]<br>
-            • If pack flow control valve affected: <a href="#ref-21-52-01" class="dispatch-link">Item 21-52-01</a> [cite: 221]<br>
-            • If pack ram air inlet affected: <a href="#ref-21-52-02" class="dispatch-link">Item 21-52-02</a> [cite: 221]<br>
-            • If turbine bypass valve affected: <a href="#ref-21-61-01" class="dispatch-link">Item 21-61-01</a> [cite: 221]
+    <!-- Item 21-01-01-02 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-01-01-02: PACK pb-sw OFF light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-01-00007463.0001001/22 MAR 10 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-01-01-02A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or both may be inoperative. </div>
+    </div>
+
+    <!-- Item 21-01-01-03 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-01-01-03: HOT AIR pb-sw FAULT light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-01-00007464.0001001/22 MAR 10 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-01-01-03A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative provided that all zone duct temperature indications are operative on the COND SD page. </div>
+    </div>
+
+    <!-- Item 21-01-01-04 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-01-01-04: HOT AIR pb-sw OFF light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-01-00007465.0001001/22 MAR 10 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-01-01-04A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative. </div>
+    </div>
+	
+	<div class="item-container searchable">
+        <div class="item-title">21-01-02-01: CABIN PRESS MODE SEL pb-sw FAULT light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-02-00007466.0001001/22 MAR 10<br>
+            Applicable to: ALL
+        </div>
+        <div class="item-code-header">21-01-02-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative.</div>
+    </div>
+
+    <div class="item-container searchable">
+        <div class="item-title">21-01-03-01: FWD ISOL VALVE pb-sw FAULT light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-03-00007467.0001001/22 MAR 10<br>
+            Applicable to: MSN 01247-01791, 03983-04038, 05933
+        </div>
+        <div class="item-code-header">21-01-03-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>D</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative.</div>
+    </div>
+
+    <div class="item-container searchable">
+        <div class="item-title">21-01-03-02: AFT ISOL VALVE pb-sw FAULT light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-03-00007468.0001001/22 MAR 10<br>
+            Applicable to: MSN 01247-01791, 03983-04038, 05933
+        </div>
+        <div class="item-code-header">21-01-03-02A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>D</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative.</div>
+    </div>
+
+    <div class="item-container searchable">
+        <div class="item-title">21-01-04-01: CAB FANS pb-sw OFF light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-04-00007469.0001001/22 MAR 10<br>
+            Applicable to: ALL
+        </div>
+        <div class="item-code-header">21-01-04-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative.</div>
+    </div>
+
+    <div class="item-container searchable">
+        <div class="item-title">21-01-04-02: BLOWER pb-sw FAULT light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-04-00007470.0001001/22 MAR 10<br>
+            Applicable to: ALL
+        </div>
+        <div class="item-code-header">21-01-04-02A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative.</div>
+    </div>
+
+ <div class="item-container searchable">
+        <div class="item-title">21-01-04-02: BLOWER pb-sw OVRD light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-04-00027867.0001001/22 MAY 24<br>
+            Applicable to: ALL
+        </div>
+        <div class="item-code-header">21-01-04-03A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative.</div>
+    </div>
+	
+	<!-- Item 21-01-04-04 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-01-04-04: EXTRACT pb-sw FAULT light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-04-00007471.0001001/22 MAY 24 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-01-04-04A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative. </div>
+    </div>
+
+    <!-- Item 21-01-04-05 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-01-04-05: EXTRACT pb-sw OVRD light</div>
+        <div class="ident-info">
+            Ident: MI-21-01-04-00027868.0001001/22 MAY 24 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-01-04-05A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative. </div>
+    </div>
+
+    <!-- Item 21-07-01-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-01-01: Pack Outlet Temperature Indication on the BLEED SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-01-00007512.0001001/22 MAR 10 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-07-01-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or both may be inoperative. </div>
+    </div>
+
+    <!-- Item 21-07-01-02 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-01-02: Pack Turbine Bypass Valve Position Indication on the BLEED SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-01-00007513.0001001/22 MAR 10 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-07-01-02A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or both may be inoperative. </div>
+    </div>
+
+    <!-- Item 21-07-01-03 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-01-03: Pack Compressor Outlet Temperature Indication on the BLEED SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-01-00007514.0001001/22 MAR 10 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-07-01-03A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or both may be inoperative. </div>
+    </div>
+
+    <!-- Item 21-07-01-04 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-01-04: Pack Flow Indication on the BLEED SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-01-00007515.0001001/22 MAR 10 <br>
+            Applicable to: ALL 
+        </div>
+        <div class="item-code-header">21-07-01-04A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or both may be inoperative. </div>
+    </div>
+	<!-- Item 21-07-01-05 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-01-05: Pack Flow Control Valve Position Indication on the BLEED SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-01-00007516.0001001/22 MAR 10[cite: 5]<br>
+            Applicable to: ALL[cite: 5]
+        </div>
+        <div class="item-code-header">21-07-01-05A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or both may be inoperative.[cite: 5]</div>
+    </div>
+
+    <!-- Item 21-07-01-06 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-01-06: Emergency Ram Air Inlet Indication on the BLEED SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-01-00007517.0001001/22 MAR 10[cite: 5]<br>
+            Applicable to: ALL[cite: 5]
+        </div>
+        <div class="item-code-header">21-07-01-06A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">May be inoperative.[cite: 5]</div>
+    </div>
+
+    <!-- Item 21-07-02-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-02-01: INLET and EXTRACT Indications on the CAB PRESS SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-02-00007518.0001001/22 MAY 19[cite: 5]<br>
+            Applicable to: ALL[cite: 5]
+        </div>
+        <div class="item-code-header">21-07-02-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or both may be inoperative. Note: During ground operations, correct avionics ventilation should be provided.[cite: 5]</div>
+    </div>
+
+    <!-- Item 21-07-02-02 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-02-02: Pressure Safety Valves Position Indication on the CAB PRESS SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-02-00007519.0001001 / 22 MAR 10[cite: 5]<br>
+            Applicable to: ALL[cite: 5]
+        </div>
+        <div class="item-code-header">21-07-02-02A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">(m) Pressure safety valves may be indicated open provided that both valves are visually checked closed. <p> (m)Refer to AMM 21-31-00-040-004 </p></div>
+    </div>
+
+    <!-- Item 21-07-02-03 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-02-03: Pack 1 and 2 Indications on the CAB PRESS SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-02-00007520.0001001/22 MAR 10[cite: 5]<br>
+            Applicable to: ALL[cite: 5]
+        </div>
+        <div class="item-code-header">21-07-02-03A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or both may be inoperative.[cite: 5]</div>
+    </div>
+	
+	<!-- Item 21-07-03-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-03-01: Indications on the COND SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-03-00007521.0001001/22 MAR 10<br>
+            Applicable to: ALL[cite: 6]
+        </div>
+        <div class="item-code-header">21-07-03-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>-</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">One or more indications may be inoperative.[cite: 6]</div>
+    </div>
+
+    <!-- Item 21-07-04-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-07-04-01: Indications on the CRUISE SD page</div>
+        <div class="ident-info">
+            Ident: MI-21-07-04-00007522.0001001/22 MAR 10[cite: 6]<br>
+            Applicable to: ALL[cite: 6]
+        </div>
+        <div class="item-code-header">21-07-04-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>-</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">Cabin and cockpit zone indications may be inoperative.[cite: 6]</div>
+    </div>
+	
+	<!-- Item 21-09-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-09-01: VENT BLOWER FAULT Alert</div>
+        <div class="ident-info">
+            Ident: MI-21-09-00007523.0001001/22 MAY 19<br>
+            Applicable to: ALL[cite: 7]<br>
+            Note: During ground operations, correct avionics ventilation should be provided.[cite: 7]
+        </div>
+
+        <!-- 21-09-01A -->
+        <div class="item-code-header">21-09-01A: Blower fan operative</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            (o) (m) May be displayed provided that:<p> 1) The blower fan is checked operative before each flight, and </p> <p> 2) The VENT AVNCS SYS FAULT alert is checked operative before each flight.</p> 
+			<p> <b>References </b> <p>
+			<p>(o) Refer to OpsProc 21-09-01A </p>
+			<p>(m) Refer to AMM Task 21-26-00-040-010 </p>
+        </div>
+
+        <br>
+
+        <!-- 21-09-01B -->
+        <div class="item-code-header">21-09-01B: Blower fan inoperative</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            May be displayed provided that the avionics blower fan is considered inoperative. <p>Refer to Item 21-26-01 Avionics Blower Fan </p>
         </div>
     </div>
-</div>
 
-<div class="mel-card">
-    <div class="alert-name">CAB PR EXCESS CAB ALT</div>
-    <div class="msn-info">Applicable to: ALL [cite: 223]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">NIL - Not related to MEL [cite: 224]</div>
-</div>
-
-<div class="mel-card">
-    <div class="alert-name">CAB PR EXCES RESIDUAL PR</div>
-    <div class="msn-info">Applicable to: ALL [cite: 226]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">
-        • Actual alert: Apply ECAM procedure [cite: 227]<br>
-        • False alert: Refer to <a href="#ref-52-10-10" class="dispatch-link">Item 52-10-10</a> [cite: 227]
-    </div>
-</div>
-
-<div class="mel-card">
-    <div class="alert-name">CAB PR LDG ELEV FAULT</div>
-    <div class="msn-info">Applicable to: ALL [cite: 236]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to <a href="#ref-21-31-04" class="dispatch-link">Item 21-31-04</a> Landing Elevation Selection AUTO Function [cite: 237]</div>
-</div>
-
-<div class="mel-card">
-    <div class="alert-name">CAB PR LO DIFF PR</div>
-    <div class="msn-info">Applicable to: ALL [cite: 239]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">NIL - Not related to MEL [cite: 240]</div>
-</div>
-
-<div class="mel-card">
-    <div class="alert-name">CAB PR OFV NOT OPEN</div>
-    <div class="msn-info">Applicable to: ALL [cite: 242]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content" style="color: #d93025; font-weight: bold;">NO DISPATCH </div>
-</div>
-
-<div class="mel-card">
-    <div class="alert-name">CAB PR SAFETY VALVE OPEN</div>
-    <div class="msn-info">Applicable to: ALL [cite: 245]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">
-        • Actual alert: Refer to FCOM/PRO-NOR-SUP-MISC-E (Flight Without Cabin Pressurization) [cite: 246]<br>
-        • False alert: Refer to <a href="#ref-21-09-03" class="dispatch-link">Item 21-09-03</a> [cite: 246]
-    </div>
-</div>
-
-<div class="mel-card">
-    <div class="alert-name">CAB PR SYS 1(2) FAULT</div>
-    <div class="msn-info">Applicable to: ALL [cite: 254]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to <a href="#ref-21-31-01" class="dispatch-link">Item 21-31-01</a> Automatic Cabin Pressure Control System [cite: 255]</div>
-</div>
-
-<div class="mel-card">
-    <div class="alert-name">CAB PR SYS 1+2 FAULT</div>
-    <div class="msn-info">Applicable to: ALL [cite: 257]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to FCOM/PRO-NOR-SUP-MISC-E (Flight Without Cabin Pressurization) [cite: 258]</div>
-</div>
-
-<div class="mel-card">
-    <div class="alert-name">COND AFT CAB DUCT OVHT</div>
-    <div class="msn-info">Applicable to: ALL [cite: 260]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to <a href="#ref-21-63-02" class="dispatch-link">Item 21-63-02</a> Cockpit and Cabin Trim Air Valve [cite: 261]</div>
-</div>
-
-<div class="mel-card">
-    <div class="alert-name">COND AFT CARGO DUCT OVHT</div>
-    <div class="msn-info">MSN: 01791, 03983-04038 </div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to <a href="#ref-21-43-02" class="dispatch-link">Item 21-43-02</a> AFT Cargo Compartment Heating [cite: 265]</div>
-</div>
-<!-- ATA 21 - AIR CONDITIONING & VENTILATION (CONTINUED) -->
-<div class="section-title">21 - AIR CONDITIONING & VENTILATION (PART 3)</div>
-
-<!-- COND AFT CRG ISOL VALVE -->
-<div class="mel-card">
-    <div class="alert-name">COND AFT CRG ISOL VALVE</div>
-    <div class="msn-info">Applicable to: MSN 01247-01791, 03983-04038, 05933[cite: 3]</div>
-    <div class="label">Aircraft Status</div><div class="content">NIL[cite: 3]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to <a href="#ref-21-28-04" class="dispatch-link">Item 21-28-04</a> AFT Cargo Isolation Valve[cite: 3]</div>
-</div>
-
-<!-- COND CKPT / FWD CAB DUCT OVHT -->
-<div class="mel-card">
-    <div class="alert-name">COND CKPT DUCT OVHT / COND FWD CAB DUCT OVHT</div>
-    <div class="msn-info">Applicable to: ALL[cite: 3]</div>
-    <div class="label">Aircraft Status</div><div class="content">NIL[cite: 3]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to <a href="#ref-21-63-02" class="dispatch-link">Item 21-63-02</a> Cockpit and Cabin Trim Air Valve[cite: 3]</div>
-</div>
-
-<!-- COND FWD CRG ISOL VALVE -->
-<div class="mel-card">
-    <div class="alert-name">COND FWD CRG ISOL VALVE</div>
-    <div class="msn-info">Applicable to: MSN 01247, 05193[cite: 3]</div>
-    <div class="label">Aircraft Status</div><div class="content">NIL[cite: 3]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to <a href="#ref-21-28-02" class="dispatch-link">Item 21-28-02</a> FWD Cargo Isolation Valve[cite: 3]</div>
-</div>
-
-<!-- COND HOT AIR FAULT (MSN Specific - 1) -->
-<div class="mel-card">
-    <div class="alert-name">COND HOT AIR FAULT</div>
-    <div class="msn-info">Applicable to: MSN 01247-01791[cite: 4]</div>
-    <div class="status-grid">
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">
-            • If COND TRIM AIR SYS FAULT not displayed on EWD: Refer to <a href="#ref-21-63-03" class="dispatch-link">Item 21-63-03</a> Hot Air Pressure Regulating Valve[cite: 4]<br>
-            • If COND TRIM AIR SYS FAULT displayed on EWD: Refer to <a href="#ref-21-63-02" class="dispatch-link">Item 21-63-02</a> Cockpit and Cabin Trim Air Valve[cite: 4]
+    <!-- Item 21-09-02 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-09-02: VENT EXTRACT FAULT Alert</div>
+        <div class="ident-info">
+            Ident: MI-21-09-00007524.0001001/22 MAY 19[cite: 7]<br>
+            Applicable to: ALL[cite: 7]<br>
+            Note: During ground operations, correct avionics ventilation should be provided.[cite: 7]
         </div>
-    </div>
-</div>
 
-<!-- COND HOT AIR FAULT (MSN Specific - 2) -->
-<div class="mel-card">
-    <div class="alert-name">COND HOT AIR FAULT</div>
-    <div class="msn-info">Applicable to: MSN 02446-05933[cite: 4]</div>
-	  <div class="label">Aircraft Status</div><div class="content">NIL</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to <a href="#ref-21-63-03" class="dispatch-link">Item 21-63-03</a> Hot Air Pressure Regulating Valve[cite: 4]</div>
-</div>
-
-<!-- COND L+R CAB FAN FAULT -->
-<div class="mel-card">
-    <div class="alert-name">COND L+R CAB FAN FAULT</div>
-    <div class="msn-info">Applicable to: ALL[cite: 4]</div>
-	  <div class="label">Aircraft Status</div><div class="content">NIL</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content" style="color: #d93025; font-weight: bold;">NO DISPATCH[cite: 4]</div>
-</div>
-
-<!-- COND LAV+GALLEY FAN FAULT -->
-<div class="mel-card">
-    <div class="alert-name">COND LAV+GALLEY FAN FAULT</div>
-    <div class="msn-info">Applicable to: ALL[cite: 4]</div>
-	  <div class="label">Aircraft Status</div><div class="content">NIL</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">Refer to <a href="#ref-21-23-01" class="dispatch-link">Item 21-23-01</a> Lavatory and Galley Extraction Fan[cite: 4]</div>
-</div>
-
-<!-- COND TRIM AIR SYS FAULT -->
-<div class="mel-card">
-    <div class="alert-name">COND TRIM AIR SYS FAULT</div>
-    <div class="msn-info">Applicable to: ALL[cite: 4]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content" style="font-size: 13px;">
-        • If trim air valves are closed: Not related to MEL[cite: 4]<br>
-        • Associated with AFT CAB / FWD CAB / CKPT TRIM VALVE subtitle: Refer to <a href="#ref-21-63-02" class="dispatch-link">Item 21-63-02</a>[cite: 4]<br>
-        • Associated with TRIM AIR HI PR subtitle: Refer to <a href="#ref-21-63-03" class="dispatch-link">Item 21-63-03</a>[cite: 4]
-    </div>
-</div>
-
-<!-- COND ZONE REGUL FAULT -->
-<div class="mel-card">
-    <div class="alert-name">COND ZONE REGUL FAULT</div>
-    <div class="msn-info">Applicable to: MSN 01247-01791[cite: 4]</div>
-    <div class="label">Condition for Dispatch</div>
-    <div class="content">
-        • If CAB ZONE AT FIXED TEMP STATUS info displayed on STATUS SD: Refer to <a href="#ref-21-63-01A" class="dispatch-link">Item 21-63-01A</a> Zone Controller Channel[cite: 4]<br>
-        • If PACKS AT FIXED TEMP STATUS info displayed on STATUS SD: Refer to <a href="#ref-21-63-01C" class="dispatch-link">Item 21-63-01C</a> Zone Controller Channel[cite: 4]
-    </div>
-</div>
-
-<!-- VENT AVNCS SYS FAULT -->
-<div class="mel-card">
-    <div class="alert-name">VENT AVNCS SYS FAULT</div>
-    <div class="msn-info">Applicable to: ALL[cite: 4]</div>
-    <div class="label">Condition for Dispatch (Specific Component)</div>
-    <div class="content" style="font-size: 13px;">
-        • If the avionics Skin air outlet valve affected: <a href="#ref-21-26-04" class="dispatch-link">21-26-04</a>[cite: 4]<br>
-        • If the avionics Skin air inlet valve affected: <a href="#ref-21-26-05" class="dispatch-link">21-26-05</a>[cite: 4]<br>
-        • If the avionics Skin exchanger inlet bypass valve affected: <a href="#ref-21-26-03" class="dispatch-link">21-26-03</a>[cite: 4]<br>
-        • If the avionics Skin exchanger outlet bypass valve affected: <a href="#ref-21-26-07" class="dispatch-link">21-26-07</a>[cite: 4]<br>
-        • If the avionics Air conditioning inlet valve affected: <a href="#ref-21-26-08" class="dispatch-link">21-26-08</a>[cite: 4]<br>
-        • If the avionics Skin exchanger isolation valve affected: <a href="#ref-21-26-06" class="dispatch-link">21-26-06</a>[cite: 4]
-    </div>
-</div>
-
-<!-- VENT AVNCS AEVC -->
-<div class="mel-card">
-    <div class="alert-name">VENT AVNCS SYS FAULT (AEVC)</div>
-    <div class="msn-info">Applicable to: ALL</div>
-    <div class="status-grid">
-        <div class="label">Aircraft Status</div>
-        <div class="content">If the Avionics Equipment Ventilation Computer (AEVC) is affected.</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">Refer to <a href="#ref-21-26-10" class="dispatch-link">Item 21-26-10</a> Avionics Equipment Ventilation Computer (AEVC)</div>
-    </div>
-</div>
-
-<!-- VENT BLOWER FAULT -->
-<div class="mel-card">
-    <div class="alert-name">VENT BLOWER FAULT</div>
-    <div class="msn-info">Applicable to: ALL</div>
-    <div class="status-grid">
-        <div class="label">Aircraft Status</div>
-        <div class="content">
-            • Actual alert<br>
-            • False alert
+        <!-- 21-09-02A -->
+        <div class="item-code-header">21-09-02A: Extract fan operative</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>No</td></tr>
+            </table>
         </div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">
-            • Actual: Refer to <a href="#ref-21-26-01" class="dispatch-link">Item 21-26-01</a> Avionics Blower Fan<br>
-            • False: Refer to <a href="#ref-21-09-01" class="dispatch-link">Item 21-09-01</a> VENT BLOWER FAULT Alert
+        <div class="footer-note">
+            (o) (m) May be displayed provided that:<p> 1) The extract fan is checked operative before each flight, and </p> 
+			<p>2) The VENT AVNCS SYS FAULT alert is checked operative before each flight.</p> <p><b> References </b><p>
+		<p>	(o) Refer to OpsProc 21-09-02A VENT EXTRACT FAULT Alert </p>
+		<p>(m) Refer to AMM Task 21-26-00-040-011.</p>
         </div>
-    </div>
-</div>
 
-<!-- VENT EXTRACT FAULT -->
-<div class="mel-card">
-    <div class="alert-name">VENT EXTRACT FAULT</div>
-    <div class="msn-info">Applicable to: ALL</div>
-    <div class="status-grid">
-        <div class="label">Aircraft Status</div>
-        <div class="content">
-            • Actual alert<br>
-            • False alert
+        <br>
+
+        <!-- 21-09-02B -->
+        <div class="item-code-header">21-09-02B: Extract fan inoperative</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>No</td></tr>
+            </table>
         </div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">
-            • Actual: Refer to <a href="#ref-21-26-02" class="dispatch-link">Item 21-26-02</a> Avionics Extract Fan<br>
-            • False: Refer to <a href="#ref-21-09-02" class="dispatch-link">Item 21-09-02</a> VENT EXTRACT FAULT Alert
-        </div>
-    </div>
-</div>
-
-<!-- VENT SKIN VALVE FAULT -->
-<div class="mel-card">
-    <div class="alert-name">VENT SKIN VALVE FAULT</div>
-    <div class="msn-info">Applicable to: ALL</div>
-    <div class="status-grid">
-        <div class="label">Aircraft Status</div>
-        <div class="content">
-            • Outlet valve determined faulty on the CAB PRESS SD page<br>
-            • Inlet valve determined faulty on the CAB PRESS SD page
-        </div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">
-            • Outlet Valve: Refer to <a href="#ref-21-26-04" class="dispatch-link">Item 21-26-04</a> Avionics Skin Air Outlet Valve<br>
-            • Inlet Valve: Refer to <a href="#ref-21-26-05" class="dispatch-link">Item 21-26-05</a> Avionics Skin Air Inlet Valve
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-    <!-- ATA 22 - AUTO FLIGHT -->
-    <div class="section-title">22 - AUTO FLIGHT</div>
-
-    <div class="mel-card">
-        <div class="alert-name">AUTO FLT A/THR OFF</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">Refer to <a href="#ref-22-30-01" class="dispatch-link">Item 22-30-01</a> Autothrust</div>
-    </div>
-
-    <div class="mel-card">
-        <div class="alert-name">AUTO FLT AP OFF</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">
-            - Actual: <a href="#ref-22-10-01" class="dispatch-link">Item 22-10-01</a><br>
-            - False: <a href="#ref-22-10-06" class="dispatch-link">Item 22-10-06</a>
+        <div class="footer-note">
+            May be displayed provided that the avionics extract fan is considered inoperative. Refer to Item 21-26-02 Avionics Extract Fan[cite: 7]
         </div>
     </div>
 
-    <div class="mel-card">
-        <div class="alert-name">AUTO FLT FAC 1(2) FAULT</div>
-        <div class="label">Condition for Dispatch</div>
-        <div class="content">
-            - FAC 1: <a href="#ref-22-60-01" class="dispatch-link">Item 22-60-01</a><br>
-            - FAC 2: <a href="#ref-22-60-02" class="dispatch-link">Item 22-60-02</a>
+    <!-- Item 21-09-03 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-09-03: CAB PR SAFETY VALVE OPEN Alert</div>
+        <div class="ident-info">
+            Ident: MI-21-09-00007525.0001001/22 MAR 10[cite: 7]<br>
+            Applicable to: ALL[cite: 7]
+        </div>
+        <div class="item-code-header">21-09-03A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            (m) May be displayed provided that both safety valves are visually checked closed.
+			<p><b> Reference </b></p> <p> (m) Refer to AMM 21-31-00-040-005 </p>
+        </div>
+    </div>
+	<!-- Item 21-21-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-21-01: Cabin Fan</div>
+        <div class="ident-info">
+            Ident: MI-21-21-00007472.0001001/22 MAY 19<br>
+            Applicable to: ALL
+        </div>
+        <div class="item-code-header">21-21-01A</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>2</td><td>1</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            (o) One may be inoperative. Note: Apply the operational procedure only in the case of continuous operation of the affected cabin fan, or in the case of "burning smell" associated with the inoperative cabin fan. <p>(o) Refer to OpsProc 21-21-01A </p>
         </div>
     </div>
 
-</div>
+    <!-- Item 21-23-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-23-01: Lavatory and Galley Extraction Fan</div>
+        <div class="ident-info">
+            Ident: MI-21-23-00007473.0002001/22 MAY 19[cite: 8]<br>
+            Applicable to: ALL[cite: 8]
+        </div>
+        <div class="item-code-header">21-23-01B</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>No</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            (o) May be inoperative provided that all duct temperatures indications for the cabin are operative on the COND SD page.<p> (o) Refer to OpsProc 21-23-01B </p>
+        </div>
+    </div>
+	<!-- Item 21-26-01 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-26-01: Avionics Blower Fan</div>
+        <div class="ident-info">
+            Ident: MI-21-26-00007474.0001001/22 MAY 19<br>
+            Applicable to: ALL<br>
+            Note: During ground operation, correct avionics ventilation should be provided.
+        </div>
 
-<!-- Linked Detail Section -->
-<div class="ref-section">
-    <h3>References & Details</h3>
-    <div id="ref-21-28-03"><b>21-28-03:</b> AFT Cargo Extraction Fan Detail</div>
-    <div id="ref-21-52-01"><b>21-52-01:</b> Air Conditioning Pack Detail</div>
-    <div id="ref-21-26-01"><b>21-26-01:</b> Avionics Blower Fan Detail</div>
-    <div id="ref-22-60-01"><b>22-60-01:</b> FAC 1 System Detail</div>
+        <!-- 21-26-01A -->
+        <div class="item-code-header">21-26-01A: VENT AVNCS SYS FAULT not displayed</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            (o) May be inoperative provided that: <p> 1) The BLOWER pb-sw is set to OVRD, and </p> 
+			<p>2) Both air conditioning packs are operative, and </p>
+			<p>3) The VENT AVNCS SYS FAULT alert is not displayed.</p>
+<p> Reference </p>
+<p>			(o) Refer to OpsProc 21-26-01A Avionics Blower Fan (VENT AVNCS SYS FAULT Alert not 
+ displayed) 
+
+  </p>
+        </div>
+
+        <br>
+
+        <!-- 21-26-01B -->
+        <div class="item-code-header">21-26-01B: Air conditioning inlet valve checked open</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            (o) (m) May be inoperative provided that: <p>1) The BLOWER pb-sw is set to OVRD, and </p> 
+			<p>2) Both air conditioning packs are operative, and </p>
+			<p>3) The air conditioning inlet valve is checked open before each flight.</p>
+<p>References </p>			
+<p>(o) Refer to OpsProc 21-26-01B Avionics Blower Fan (Air conditioning inlet valve checked open 
+before each flight) </p>
+<p>(m) Refer to AMM Task 21-26-00-040-006 </p>
+        </div>
+
+        <br>
+
+        <!-- 21-26-01C -->
+        <div class="item-code-header">21-26-01C: Avionics ventilation system checked</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            (o) (m) May be inoperative provided that: <p>1) The BLOWER pb-sw is set to OVRD, and </p>
+			<p>2) Both air conditioning packs are operative, and </p>
+			<p>3) The air conditioning inlet valve is secured in the open position, and </p>
+			<p>4) The avionics ventilation system is checked before each flight.</p>
+<p>References </p>	
+<p>		(o) Refer to OpsProc 21-26-01C Avionics Blower Fan (Avionics ventilation system checked 
+before each flight) </p>
+<p>(m) Refer to AMM Task 21-26-00-040-013 </p>
+        </div>
+    </div>
+
+    <!-- Item 21-26-02 -->
+    <div class="item-container searchable">
+        <div class="item-title">21-26-02: Avionics Extract Fan</div>
+        <div class="ident-info">
+            Ident: MI-21-26-00007475.0001001/22 MAY 19<br>
+            Applicable to: ALL<br>
+            Note: During ground operation, correct avionics ventilation should be provided.
+        </div>
+
+        <!-- 21-26-02A -->
+        <div class="item-code-header">21-26-02A: VENT AVNCS SYS FAULT not displayed</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            (o) May be inoperative provided that: <p>1) The blower fan is operative, and </p>
+			<p>2) The EXTRACT pb-sw is set to OVRD, and </p>
+			<p>3) Both air conditioning packs are operative, and </p>
+			<p>4) The VENT AVNCS SYS FAULT alert is not displayed.</p> 
+			<p>Reference </p>
+			<p>(o) Refer to OpsProc 21-26-02A Avionics Extract Fan (VENT AVNCS SYS FAULT Alert not 
+ displayed)  </p>
+        </div>
+
+        <br>
+
+        <!-- 21-26-02B -->
+        <div class="item-code-header">21-26-02B: Air conditioning inlet valve checked open</div>
+        <div class="table-responsive">
+            <table>
+                <tr><th>Repair interval</th><th>Nbr installed</th><th>Nbr required</th><th>Placard</th></tr>
+                <tr><td>C</td><td>1</td><td>0</td><td>Yes</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            (o) (m) May be inoperative provided that:<p> 1) The blower fan is operative, and </p> 
+			<p> 2) The EXTRACT pb-sw is set to OVRD, and </p> 
+			<p> 3) Both air conditioning packs are operative, and </p>
+<p> 			4) The air conditioning inlet valve is checked open before each flight. </p> 
+<p> References </p> 
+<p> (o)Refer to OpsProc 21-26-02B Avionics Extract Fan (Air conditioning inlet valve checked open 
+before each flight) </p>
+<p> (m)Refer to AMM Task 21-26-00-040-007  </p>
+        </div>
+    </div>
+	
+<div id="noResult"> No Result </div>
 </div>
-<button onclick="goHome()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;" onmousedown="this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';" onmouseup="this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';">Main Check List</button>
-    
 
 <script>
-function searchMEL() {
-    let input = document.getElementById('searchInput').value.toUpperCase();
-    let cards = document.getElementsByClassName('mel-card');
-    for (let i = 0; i < cards.length; i++) {
-        let text = cards[i].innerText.toUpperCase();
-        cards[i].style.display = text.indexOf(input) > -1 ? "" : "none";
+function searchFunction() {
+    var input, filter, list, items, txtValue, i, visibleCount = 0;
+    input = document.getElementById('searchInput');
+    filter = input.value.toUpperCase();
+    list = document.getElementById("itemList");
+    items = list.getElementsByClassName('searchable');
+
+    for (i = 0; i < items.length; i++) {
+        txtValue = items[i].textContent || items[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            items[i].style.display = "";
+            visibleCount++;
+        } else {
+            items[i].style.display = "none";
+        }
     }
+    
+    document.getElementById('noResult').style.display = visibleCount === 0 ? "block" : "none";
 }
- 
-	function goHome() {
-    window.location.href = "index.html";
-  }
-     
 </script>
 
 </body>

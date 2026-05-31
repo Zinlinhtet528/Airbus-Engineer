@@ -3,18 +3,13 @@ workflows:
     name: iOS Build
 
     environment:
-      node: 18
+      node: 22
       xcode: latest
 
     scripts:
-      - npm cache clean --force
-      - rm -rf node_modules package-lock.json
+      - node -v
       - npm install
-
       - npm install @capacitor/core @capacitor/cli
-
-      # 🔥 fix permission issue
-      - chmod +x node_modules/.bin/* || true
 
       - npx cap sync ios
 

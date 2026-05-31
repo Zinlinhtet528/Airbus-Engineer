@@ -4,14 +4,13 @@ workflows:
 
     environment:
       node: 22
-      xcode: latest
 
     scripts:
-      - node -v
       - npm install
       - npm install @capacitor/core @capacitor/cli
 
-      - npx cap sync ios
+      # 🔥 FIX: bypass broken npx binary
+      - node node_modules/@capacitor/cli/bin/capacitor.js sync ios
 
     artifacts:
       - ios/App/build/**/*.app

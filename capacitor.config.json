@@ -1,5 +1,5 @@
 {
   "appId": "com.airbuszlh.app",
   "appName": "airbus-engineer",
-  "webDir": "www"
+  "webDir": "."
 }

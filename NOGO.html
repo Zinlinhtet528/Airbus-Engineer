@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A320 NO-GO Items</title>
+    <style>
+        /* အခြေခံ Style များ */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0ea5e9; /* Sky Blue */
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header / Tab Style */
+        .header-container {
+            width: 100%;
+            background-color: #0369a1; /* Darker Blue for Header */
+            padding: 10px 15px;
+            display: flex;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .main-home-btn {
+            background-color: #ffffff;
+            color: #0369a1;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 3px solid #e0f2fe;
+            font-size: 14px;
+        }
+
+        /* Container Style */
+        .container {
+            width: 95%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Search Input Style */
+        #searchInput {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            backdrop-filter: blur(5px);
+        }
+
+        #searchInput::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        #searchInput:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: white;
+        }
+
+        /* List Items Style */
+        #itemList {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #itemList li {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 14px;
+            line-height: 1.4;
+            transition: background 0.3s;
+        }
+
+        #itemList li:last-child {
+            border-bottom: none;
+        }
+
+        #itemList li:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ATA နံပါတ်ကို အရောင်ခွဲပေးခြင်း */
+        .ata-code {
+            font-weight: bold;
+            color: #f0f9ff;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-bottom: 20px;
+            font-size: 12px;
+            opacity: 0.8;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <button class="main-home-btn" onclick="goHome()">Main</button>
+    </div>
+
+    <div class="container">
+        <h2>A320 NO-GO Items</h2>
+        
+        <input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Search ATA or Item Name...">
+
+        <ul id="itemList">
+            <li><span class="ata-code">ATA 21</span> CAB PR OFV NOT OPEN</li>
+            <li><span class="ata-code">ATA 21</span> COND L+R CAB FAN FAULT</li>
+            <li><span class="ata-code">ATA 22</span> AUTO FLT FAC 1+2 FAULT</li>
+            <li><span class="ata-code">ATA 22</span> AUTO FLT FCU 1+2 FAULT</li>
+            <li><span class="ata-code">ATA 22</span> AUTO FLT RUD TRIM SYS</li>
+            <li><span class="ata-code">ATA 22</span> AUTO FLT RUD TRV LIM SYS</li>
+            <li><span class="ata-code">ATA 22</span> AUTO FLT YAW DAMPER SYS</li>
+            <li><span class="ata-code">ATA 23</span> COM CIDS 1+2 FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC AC BUS 1 FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC AC BUS 2 FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC AC ESS BUS ALTN</li>
+            <li><span class="ata-code">ATA 24</span> ELEC AC ESS BUS FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC AC ESS BUS SHED</li>
+            <li><span class="ata-code">ATA 24</span> ELEC BAT 1(2) FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC DC BAT BUS FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC DC BUS 1 FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC DC BUS 2 FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC DC BUS 1+2 FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC DC EMER CONFIG</li>
+            <li><span class="ata-code">ATA 24</span> ELEC DC ESS BUS FAULT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC DC ESS BUS SHED</li>
+            <li><span class="ata-code">ATA 24</span> ELEC EMER CONFIG</li>
+            <li><span class="ata-code">ATA 24</span> ELEC ESS BUSSES ON BAT</li>
+            <li><span class="ata-code">ATA 24</span> ELEC STATIC INV FAULT</li>
+            <li><span class="ata-code">ATA 26</span> APU FIRE</li>
+            <li><span class="ata-code">ATA 26</span> AVIONICS SMOKE</li>
+            <li><span class="ata-code">ATA 26</span> ENG 1(2) FIRE</li>
+            <li><span class="ata-code">ATA 26</span> ENG 1(2) FIRE DET FAULT</li>
+            <li><span class="ata-code">ATA 26</span> SMOKE AFT CARGO SMOKE</li>
+            <li><span class="ata-code">ATA 26</span> SMOKE FWD CARGO SMOKE</li>
+            <li><span class="ata-code">ATA 26</span> SMOKE LAVATORY SMOKE</li>
+            <li><span class="ata-code">ATA 27</span> CONFIG L(R) SIDESTICK FAULT</li>
+            <li><span class="ata-code">ATA 27</span> CONFIG PITCH TRIM NOT IN T.O. RANGE</li>
+            <li><span class="ata-code">ATA 27</span> CONFIG RUD TRIM NOT IN T.O. RANGE</li>
+            <li><span class="ata-code">ATA 27</span> CONFIG SLATS(FLAPS) NOT IN T.O. CONFIG</li>
+            <li><span class="ata-code">ATA 27</span> CONFIG SPEED BRK NOT RETRACTED</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL ALTN LAW</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL DIRECT LAW</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL ELAC 2 FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL ELAC 2 PITCH FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL ELEV SERVO FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL FCDC 1 FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL FCDC 1+2 FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL FLAP ATTACH SENSOR</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL FLAP SYS 1 FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL FLAPS(SLATS) FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL FLAPS(SLATS) LOCKED</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL L(R) AIL FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL L(R) ELEV FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL L+R ELEV FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL L(R) SIDESTICK FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL SLAT SYS 1 FAULT</li>
+            <li><span class="ata-code">ATA 27</span> F/CTL STABILIZER JAM</li>
+            <li><span class="ata-code">ATA 28</span> FUEL L(R) INNER(OUTER) TK HI TEMP</li>
+            <li><span class="ata-code">ATA 28</span> FUEL L(R) INNER(OUTER) TK LO TEMP</li>
+            <li><span class="ata-code">ATA 28</span> FUEL L(R) TK PUMP 1+2 LO PR</li>
+            <li><span class="ata-code">ATA 28</span> FUEL L(R) WING TK LO LVL</li>
+            <li><span class="ata-code">ATA 28</span> FUEL L+R WING TK LO LVL</li>
+            <li><span class="ata-code">ATA 28</span> FUEL X FEED VALVE FAULT</li>
+            <li><span class="ata-code">ATA 29</span> HYD B ELEC PUMP LO PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD B ELEC PUMP OVHT</li>
+            <li><span class="ata-code">ATA 29</span> HYD B RSVR LO AIR PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD B RSVR LO LVL</li>
+            <li><span class="ata-code">ATA 29</span> HYD B RSVR OVHT</li>
+            <li><span class="ata-code">ATA 29</span> HYD B SYS LO PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD B+G SYS LO PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD B+Y SYS LO PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD G ENG 1 PUMP LO PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD G RSVR LO AIR PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD G RSVR LO LVL</li>
+            <li><span class="ata-code">ATA 29</span> HYD G RSVR OVHT</li>
+            <li><span class="ata-code">ATA 29</span> HYD G SYS LO PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD G+Y SYS LO PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD PTU FAULT</li>
+            <li><span class="ata-code">ATA 29</span> HYD RAT FAULT</li>
+            <li><span class="ata-code">ATA 29</span> HYD Y ENG 2 PUMP LO PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD Y RSVR LO AIR PR</li>
+            <li><span class="ata-code">ATA 29</span> HYD Y RSVR LO LVL</li>
+            <li><span class="ata-code">ATA 29</span> HYD Y RSVR OVHT</li>
+            <li><span class="ata-code">ATA 29</span> HYD Y SYS LO PR</li>
+            <li><span class="ata-code">ATA 30</span> ANTI ICE ALL PITOT</li>
+            <li><span class="ata-code">ATA 30</span> ANTI ICE CAPT+F/O PITOT</li>
+            <li><span class="ata-code">ATA 30</span> ANTI ICE CAPT+STBY PITOT</li>
+            <li><span class="ata-code">ATA 30</span> ANTI ICE F/O+STBY PITOT</li>
+            <li><span class="ata-code">ATA 30</span> ANTI ICE L+R WINDSHIELD</li>
+            <li><span class="ata-code">ATA 31</span> EIS DMC/FWC COM FAULT</li>
+            <li><span class="ata-code">ATA 31</span> FWS FWC 1 FAULT</li>
+            <li><span class="ata-code">ATA 31</span> FWS FWC 1+2 FAULT</li>
+            <li><span class="ata-code">ATA 31</span> FWS OEB/FWC DISCREPANCY</li>
+            <li><span class="ata-code">ATA 31</span> FWS SDAC 1 FAULT</li>
+            <li><span class="ata-code">ATA 31</span> FWS SDAC 1+2 FAULT</li>
+            <li><span class="ata-code">ATA 32</span> BRAKES ALTN BRK FAULT</li>
+            <li><span class="ata-code">ATA 32</span> BRAKES ALTN L(R) RELEASED</li>
+            <li><span class="ata-code">ATA 32</span> BRAKES A/SKID N/WS FAULT</li>
+            <li><span class="ata-code">ATA 32</span> BRAKES BRK Y ACCU LO PR</li>
+            <li><span class="ata-code">ATA 32</span> BRAKES HOT</li>
+            <li><span class="ata-code">ATA 32</span> BRAKES NORM BRK FAULT</li>
+            <li><span class="ata-code">ATA 32</span> BRAKES NORM+ALT FAULT</li>
+            <li><span class="ata-code">ATA 32</span> CONFIG PARK BRK ON</li>
+            <li><span class="ata-code">ATA 32</span> L/G DOORS NOT CLOSED</li>
+            <li><span class="ata-code">ATA 32</span> L/G LGCIU 1 FAULT</li>
+            <li><span class="ata-code">ATA 32</span> L/G SHOCK ABSORBER FAULT</li>
+            <li><span class="ata-code">ATA 32</span> L/G SYS DISAGREE</li>
+            <li><span class="ata-code">ATA 32</span> WHEEL HYD SEL FAULT</li>
+            <li><span class="ata-code">ATA 32</span> WHEEL TYRE LO PR</li>
+            <li><span class="ata-code">ATA 34</span> NAV ADR(1+2)(1+3)(2+3) FAULT</li>
+            <li><span class="ata-code">ATA 34</span> NAV ADR 1+2+3 FAULT</li>
+            <li><span class="ata-code">ATA 34</span> NAV ADR DISAGREE</li>
+            <li><span class="ata-code">ATA 34</span> NAV IR DISAGREE</li>
+            <li><span class="ata-code">ATA 34</span> NAV IR (1+2)(1+3)(2+3) FAULT</li>
+            <li><span class="ata-code">ATA 36</span> AIR APU BLEED LEAK</li>
+            <li><span class="ata-code">ATA 36</span> AIR ENG 1+2 BLEED FAULT</li>
+            <li><span class="ata-code">ATA 36</span> AIR ENG 1(2) BLEED LEAK</li>
+            <li><span class="ata-code">ATA 36</span> AIR L(R) WING LEAK</li>
+            <li><span class="ata-code">ATA 36</span> AIR L(R) WING LEAK DET FAULT</li>
+            <li><span class="ata-code">ATA 36</span> BLEED MONITORING FAULT</li>
+            <li><span class="ata-code">ATA 70</span> ENG TYPE DISAGREE</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) COMPRESSOR VANE</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1+2 COMPRESSOR VANE</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) CTL VALVE FAULT</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) EGT(FF)(N1)(N2) DISCREPANCY</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) EIU FAULT</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) FADEC A(B) FAULT</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) FADEC ALTERNATOR</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) FADEC FAULT</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) FADEC HI TEMP</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) FUEL CTL FAULT</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) FUEL FILTER CLOG</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) HP FUEL VALVE</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) LOW N1</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) OIL FILTER CLOG</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) OIL HI TEMP</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) OIL LO PR</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) OVSPD PROT FAULT</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) PROBES FAULT</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) REV PRESSURIZED</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) REVERSE UNLOCKED</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) SENSOR FAULT</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) THR LEVER DISAGREE</li>
+            <li><span class="ata-code">ATA 70</span> ENG 1(2) THR LEVER FAULT</li>
+        </ul>
+
+        <div class="footer">Coded By Zin Lin Htet</div>
+    </div>
+
+    <script>
+        /* ရှာဖွေသည့် Function */
+        function searchFunction() {
+            let input = document.getElementById("searchInput");
+            let filter = input.value.toUpperCase();
+            let ul = document.getElementById("itemList");
+            let li = ul.getElementsByTagName("li");
+
+            for (let i = 0; i < li.length; i++) {
+                let txtValue = li[i].textContent || li[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+        /* Home သို့ ပြန်သွားရန် */
+        function goHome() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

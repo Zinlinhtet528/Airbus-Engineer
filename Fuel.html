@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Calculation Tool</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a; 
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-container {
+            width: 100%;
+            background-color: #1e293b;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            border-bottom: 2px solid #334155;
+        }
+
+        .main-home-btn {
+            background-color: #0284c7;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 3px solid #0369a1;
+            transition: 0.2s;
+        }
+
+        .container {
+            width: 98%; /* ပိုကျယ်အောင် နည်းနည်းချဲ့ထားပါတယ် */
+            max-width: 500px;
+            padding: 15px;
+            box-sizing: border-box;
+            margin-bottom: 50px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            table-layout: fixed; /* Column width တွေကို ပုံသေဖြစ်စေဖို့ */
+        }
+
+        th {
+            background-color: #334155;
+            padding: 10px 5px;
+            font-size: 0.75rem; /* စာလုံးနည်းနည်းသေးလိုက်ရင် Mobile မှာ ပိုဆံ့ပါတယ် */
+            text-transform: uppercase;
+            border: 1px solid #475569;
+        }
+
+        td {
+            padding: 8px 4px;
+            border: 1px solid #475569;
+            text-align: center;
+        }
+
+        /* Input အကွက်ကို ပြုပြင်ထားတဲ့အပိုင်း */
+        input {
+            width: 85%; /* ဘေးဘောင်နဲ့ မကပ်အောင် */
+            min-width: 60px; /* အနည်းဆုံး ဂဏန်း ၆ လုံးစာ မြင်ရမယ့် အကျယ် */
+            padding: 8px 4px;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background-color: #0f172a;
+            color: white;
+            text-align: center;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+
+        input:disabled {
+            background-color: #334155;
+            color: #94a3b8;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .button-main {
+            flex: 2;
+            padding: 15px;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+        }
+
+        .button-reset {
+            flex: 1;
+            padding: 15px;
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .button-main:active, .button-reset:active {
+            transform: scale(0.95);
+        }
+
+        b { color: #38bdf8; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <button class="main-home-btn" onclick="goHome()">Main</button>
+    </div>
+
+    <div class="container" id="appContent">
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">TANK</th>
+                    <th>IN TANK</th>
+                    <th>ACTUAL</th>
+                    <th>DEP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>LH</td>
+                    <td><input type="number" id="intank_lh" class="save-data"></td>
+                    <td><input type="number" id="uplift_lh" disabled></td>
+                    <td><input type="number" id="dep_lh" class="save-data"></td>
+                </tr>
+                <tr>
+                    <td>CENTER</td>
+                    <td><input type="number" id="intank_center" class="save-data"></td>
+                    <td><input type="number" id="uplift_center" disabled></td>
+                    <td><input type="number" id="dep_center" class="save-data"></td>
+                </tr>
+                <tr>
+                    <td>RH</td>
+                    <td><input type="number" id="intank_rh" class="save-data"></td>
+                    <td><input type="number" id="uplift_rh" disabled></td>
+                    <td><input type="number" id="dep_rh" class="save-data"></td>
+                </tr>
+                <tr style="background-color: #334155;">
+                    <td><b>TOTAL</b></td>
+                    <td><input type="number" id="intank_total" disabled></td>
+                    <td><input type="number" id="uplift_total" disabled></td>
+                    <td><input type="number" id="dep_total" disabled></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="button-group">
+            <button class="button-main" onclick="calc()">Calculate Fuel</button>
+            <button class="button-reset" onclick="resetAll()">Reset</button>
+        </div>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width: 40%;"><b>FUEL SUPPLIER</b></td>
+                    <td colspan="3"><input type="text" id="fuel_supplier" class="save-data"></td>
+                </tr>
+                <tr>
+                    <td><b>RECEPT NO</b></td>
+                    <td colspan="3"><input type="text" id="recept_no" class="save-data"></td>
+                </tr>
+                <tr>
+                    <th colspan="4" style="background-color: #0284c7; color: white;">UPLIFT CONVERSION</th>
+                </tr>
+                <tr>
+                    <td><b>UPLIFT SG</b></td>
+                    <td colspan="3"><input type="number" id="uplift_sg" step="0.0001" class="save-data"></td>
+                </tr>
+                <tr>
+                    <td><b>LITERS / GAL</b></td>
+                    <td colspan="3"><input type="number" id="liters_gallons" step="0.0001" class="save-data"></td>
+                </tr>
+                <tr style="background-color: #334155;">
+                    <td><b>RESULT (KG)</b></td>
+                    <td colspan="3"><input type="number" id="uplift_kg" disabled></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="button-main" onclick="calcLitre()">Calculate Liters/Gallons</button>
+
+    </div>
+
+    <script>
+        window.onload = function() {
+            const inputs = document.querySelectorAll('.save-data');
+            inputs.forEach(input => {
+                const savedValue = localStorage.getItem(input.id);
+                if (savedValue) {
+                    input.value = savedValue;
+                }
+            });
+            calc();
+        };
+
+        document.querySelectorAll('.save-data').forEach(input => {
+            input.addEventListener('input', () => {
+                localStorage.setItem(input.id, input.value);
+            });
+        });
+
+        function resetAll() {
+            if (confirm("ဒေတာအားလုံးကို ဖျက်ပစ်မှာ သေချာပါသလား?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        function goHome() {
+            window.location.href = "index.html"; 
+        }
+
+        function calc() {
+            const lhIn = parseFloat(document.getElementById('intank_lh').value) || 0;
+            const lhDep = parseFloat(document.getElementById('dep_lh').value) || 0;
+            const cenIn = parseFloat(document.getElementById('intank_center').value) || 0;
+            const cenDep = parseFloat(document.getElementById('dep_center').value) || 0;
+            const rhIn = parseFloat(document.getElementById('intank_rh').value) || 0;
+            const rhDep = parseFloat(document.getElementById('dep_rh').value) || 0;
+
+            const lhUp = lhDep - lhIn;
+            const cenUp = cenDep - cenIn;
+            const rhUp = rhDep - rhIn;
+
+            document.getElementById('uplift_lh').value = lhUp;
+            document.getElementById('uplift_center').value = cenUp;
+            document.getElementById('uplift_rh').value = rhUp;
+
+            const totalIn = lhIn + cenIn + rhIn;
+            const totalUp = lhUp + cenUp + rhUp;
+            const totalDep = lhDep + cenDep + rhDep;
+
+            document.getElementById('intank_total').value = totalIn;
+            document.getElementById('uplift_total').value = totalUp;
+            document.getElementById('dep_total').value = totalDep;
+        }
+
+        function calcLitre() {
+            const sg = parseFloat(document.getElementById('uplift_sg').value) || 0;
+            const amount = parseFloat(document.getElementById('liters_gallons').value) || 0;
+            
+            if (sg > 0 && amount > 0) {
+                const result = sg * amount;
+                document.getElementById('uplift_kg').value = result.toFixed(2);
+            }
+        }
+    </script>
+</body>
+</html>

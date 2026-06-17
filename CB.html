@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Procedure & Ventilation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(180deg, #072a6b 0%, #19529f 40%, #c48c41 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #ffffff;
+            padding: 15px;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .main-home-btn {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 5px;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 15px;
+            display: none; /* Hidden on main page */
+        }
+
+        .app-title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-input:focus {
+            outline: 2px solid #ffcc00;
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 18px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Chapters Grid Layout */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .chapter-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chapter-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Table Styling */
+        .table-container {
+            width: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            overflow: hidden;
+            background-color: rgba(0, 32, 91, 0.9);
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.15);
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        td:nth-child(2), td:nth-child(3) {
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #ffcc00;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+       <button onclick="goHome()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;\" onmousedown=\"this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';\" onmouseup=\"this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';\">Main</button>
+    </div>
+
+    <div class="app-header">
+        <button class="back-btn" id="backBtn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="app-title" id="appTitle">Chapters</div>
+    </div>
+
+    <div class="search-container" id="searchSection">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search Description word..." oninput="handleSearch()">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    </div>
+
+    <div id="pageMain" class="page active">
+        <div class="chapters-grid">
+            <div class="chapter-card" onclick="openChapter('ventilation')">
+                <span>Ch. 21 Cargo & Avionics Ventilation</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+           <div class="chapter-card" onclick="openChapter('autopilot')">
+                <span>Ch. 22 Auto Flight </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			  <div class="chapter-card" onclick="openChapter('com')">
+                <span>Ch. 23 Communication </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			 <div class="chapter-card" onclick="openChapter('ele')">
+                <span>Ch. 24 Electrical System </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			 <div class="chapter-card" onclick="openChapter('equip')">
+                <span>Ch. 25 Equipment and Furnishing </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			 <div class="chapter-card" onclick="openChapter('fire')">
+                <span>Ch. 26 Fire Extingushing </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			 <div class="chapter-card" onclick="openChapter('flight')">
+                <span>Ch. 27 Flight Control </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			 <div class="chapter-card" onclick="openChapter('fuel')">
+                <span>Ch. 28 Fuel System </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			 <div class="chapter-card" onclick="openChapter('hyd')">
+                <span>Ch. 29 Hydraulic System </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			 <div class="chapter-card" onclick="openChapter('ice')">
+                <span>Ch. 30 Ice and Rain </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			<div class="chapter-card" onclick="openChapter('indication')">
+                <span>Ch. 31 Indication and Recording </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			<div class="chapter-card" onclick="openChapter('landing')">
+                <span>Ch. 32 Landing Gear </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			<div class="chapter-card" onclick="openChapter('lighting')">
+                <span>Ch. 33 Ligthing </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			<div class="chapter-card" onclick="openChapter('nav')">
+                <span>Ch. 34 Navigation </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			<div class="chapter-card" onclick="openChapter('oxy')">
+                <span>Ch. 35 Oxygen </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			<div class="chapter-card" onclick="openChapter('pneumatic')">
+                <span>Ch. 36 Pneumatic </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			
+			
+			<div class="chapter-card" onclick="openChapter('info')">
+                <span>Ch. 43 Information </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			
+			<div class="chapter-card" onclick="openChapter('igg')">
+                <span>Ch. 47 Inert Gas </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			<div class="chapter-card" onclick="openChapter('apu')">
+                <span>Ch. 49 APU </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			<div class="chapter-card" onclick="openChapter('door')">
+                <span>Ch. 52 Door</span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			<div class="chapter-card" onclick="openChapter('eng')">
+                <span>Ch. 70 Engine </span>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+			
+			
+        </div>
+    </div>
+
+    <div id="pageDetails" class="page">
+        <div class="table-container" id="detailsTableContainer">
+            </div>
+    </div>
+
+    <div id="pageSearch" class="page">
+        <div class="table-container" id="searchResultsContainer">
+            </div>
+    </div>
+
+    <script>
+        // Original unchanged data from your image
+        const tableData = [
+            { desc: "AFT CARGO VENT HTG CTL & MONG", cb: "C7", loc: "49 VU", chapter: "ventilation" },
+            { desc: "FWD CARGO VENT CTL & MONG", cb: "C8", loc: "49 VU", chapter: "ventilation" },
+            { desc: "AFT CARGO VENT & HTG FAN", cb: "S22", loc: "122 VU", chapter: "ventilation" },
+            { desc: "AVNCS VENT BLOWER FAN", cb: "AD10", loc: "123 VU", chapter: "ventilation" },
+            { desc: "AVNCS VENT CTL", cb: "D5", loc: "49 VU", chapter: "ventilation" },
+            { desc: "AVNCS VENT CTL", cb: "06", loc: "49 VU", chapter: "ventilation" },
+            { desc: "AVNCS VENT EXTC FAN", cb: "AE2", loc: "123 VU", chapter: "ventilation" },
+            { desc: "AVNCS VENT MONG", cb: "Y17", loc: "122 VU", chapter: "ventilation" },
+		
+{ desc: "CAB PRESS CTL 1", cb: "D9", loc: "49 VU", chapter: "ventilation" },
+{ desc: "CAB PRESS CTL2", cb: "Y22", loc: "122 VU", chapter: "ventilation" },
+{ desc: "CAB PRESS CTL MAN", cb: "Y23", loc: "122 VU", chapter: "ventilation" },
+{ desc: "FLOW CTL & IND 1", cb: "D7", loc: "49 VU", chapter: "ventilation" },
+{ desc: "FLOW CTL & IND 2", cb: "V21", loc: "122 VU", chapter: "ventilation" },
+{ desc: "FLOW MIXER FLAP", cb: "V22", loc: "122 VU", chapter: "ventilation" },
+{ desc: "FWD CARGO VENT FAN", cb: "T22", loc: "122 VU", chapter: "ventilation" },
+{ desc: "LAV/GALLEY VENT CTL/ EXTRACT FAN CTL", cb: "U21", loc: "122 VU", chapter: "ventilation" },
+{ desc: "LAV/GALLEY VENT CTL/ EXTRACT FAN SPLY", cb: "U19", loc: "122 VU", chapter: "ventilation" },
+{ desc: "PACK TEMP CTL SYS 1 (115 VAC)", cb: "X22", loc: "122 VU", chapter: "ventilation" },
+{ desc: "PACK TEMP CTL SYS 1 (28 VDC)", cb: "X21", loc: "122 VU", chapter: "ventilation" },
+{ desc: "PACK TEMP CTL SYS 1/2 (115 VAC)", cb: "W22", loc: "122 VU", chapter: "ventilation" },
+{ desc: "PACK TEMP CTL SYS 1/2 (28 VDC)", cb: "W21", loc: "122 VU", chapter: "ventilation" },
+{ desc: "PACK TEMP CTL SYS 2/1 (115 VAC)", cb: "Y18", loc: "122 VU", chapter: "ventilation" },
+{ desc: "PACK TEMP CTL SYS 2/1 (28 VDC)", cb: "Y19", loc: "122 VU", chapter: "ventilation" },
+
+{ desc: "PACK TEMP CTL SYS 2/2 (115 VAC)", cb: "Y20", loc: "122 VU", chapter: "ventilation" },
+{ desc: "PACK TEMP CTL SYS 2/2 (28 VDC)", cb: "Y21", loc: "122 VU", chapter: "ventilation" },
+{ desc: "RAM AIR INLET", cb: "D10", loc: "49 VU", chapter: "ventilation" },
+{ desc: "RECIRC FAN L CTL", cb: "X20", loc: "122 VU", chapter: "ventilation" },
+{ desc: "RECIRC FAN L SPLY", cb: "X18", loc: "122 VU", chapter: "ventilation" },
+{ desc: "RECIRC FAN R CTL", cb: "W20", loc: "122 VU", chapter: "ventilation" },
+{ desc: "RECIRC FAN A SPLY", cb: "W18", loc: "122 VU", chapter: "ventilation" },
+{ desc: "RPCU", cb: "X23", loc: "122 VU", chapter: "ventilation" },
+{ desc: "TEMP CTL SYS1 CHAN B (28 VDC)", cb: "D08", loc: "49 VU", chapter: "ventilation" },
+{ desc: "ZONE TEMP CTL (115 VAC SYS 1)", cb: "V17", loc: "122 VU", chapter: "ventilation" },
+{ desc: "ZONE TEMP CTL (115 VAC SYS 2)", cb: "V18", loc: "122 VU", chapter: "ventilation" },
+{ desc: "ZONE TEMP CTL (28 VDC SYS 1)", cb: "V19", loc: "122 VU", chapter: "ventilation" },
+{ desc: "ZONE TEMP CTL (28 VDC SYS 2)", cb: "V20", loc: "122 VU", chapter: "ventilation" },
+
+
+//Chapter 22
+{ desc: "ATSU 1", cb: "L16", loc: "121 VU", chapter: "autopilot" },
+{ desc: "ATSU 1 SWTH", cb: "L15", loc: "121 VU", chapter: "autopilot" },
+{ desc: "FAC 1 26 VAC", cb: "B3", loc: "49 VU", chapter: "autopilot" },
+{ desc: "FAC 1 28 VDC", cb: "B4", loc: "49 VU", chapter: "autopilot" },
+{ desc: "FAC 2(26 VAC)", cb: "M18", loc: "121 VU", chapter: "autopilot" },
+{ desc: "FAC 2(28 VDC)", cb: "M19", loc: "121 VU", chapter: "autopilot" },
+{ desc: "FCU 1", cb: "B5", loc: "49 VU", chapter: "autopilot" },
+{ desc: "FCU 2", cb: "M21", loc: "121 VU", chapter: "autopilot" },
+{ desc: "FMGC 1", cb: "B2", loc: "49 VU", chapter: "autopilot" },
+{ desc: "FMGC2", cb: "M17", loc: "121 VU", chapter: "autopilot" },
+{ desc: "MCDU 1", cb: "B1", loc: "49 VU", chapter: "autopilot" },
+{ desc: "MCDU 2", cb: "N20", loc: "121 VU", chapter: "autopilot" },
+{ desc: "RUDDER ARTF FEEL", cb: "N17", loc: "121 VU", chapter: "autopilot" },
+{ desc: "RUDDER TRIM IND", cb: "M20", loc: "121 VU", chapter: "autopilot" },
+{ desc: "STICK LOCK", cb: "N16", loc: "121 VU", chapter: "autopilot" },
+
+
+
+//Chapter 23
+
+{ desc: "ACARS MU", cb: "L6", loc: "121 VU", chapter: "com" },
+{ desc: "ACP AVNCS COMPT", cb: "M3", loc: "121 VU", chapter: "com" },
+{ desc: "ACP THIRD OCC PNT", cb: "M2", loc: "121 VU", chapter: "com" },
+{ desc: "AUDIO ACP CAPT", cb: "G6", loc: "49 VU", chapter: "com" },
+{ desc: "AUDIO ACP F/O", cb: "G7", loc: "49 VU", chapter: "com" },
+{ desc: "AUDIO FLT INTPH", cb: "G8", loc: "49 VU", chapter: "com" },
+{ desc: "CIDS DEU A ESS LINE 1", cb: "G4", loc: "49 VU", chapter: "com" },
+{ desc: "CIDS DEU A ESS LINE 2", cb: "G5", loc: "49 VU", chapter: "com" },
+{ desc: "CIDS DEU A NORM L. AFT (M12 for A320)", cb: "M13", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DEU A NORM L. FWD (M8 for A320)", cb: "M9", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DEU A NORM L. MID (M10 for A320)", cb: "M11", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DEU A NORM R. AFT (M13 for A320)", cb: "M14", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DEU A NORM A. FWD (M9 for A320)", cb: "M10", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DEU A NORM R. MID (M11 for A320)", cb: "M12", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DEU B ESS", cb: "G3", loc: "49 VU", chapter: "com" },
+{ desc: "CIDS DEU B NORM (M7 for A320)", cb: "M8", loc: "121 VU", chapter: "com" },
+
+{ desc: "CIDS DIR 1 & 2 ESS", cb: "G2", loc: "49 VU", chapter: "com" },
+{ desc: "CIDS DIR 1 & 2 NORM", cb: "M5", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DIR NORM 1 (A319 ONLY)", cb: "M5", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DIR NORM 2 (A319 ONLY)", cb: "M6", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS AND ATTND PNL (A319 ONLY)", cb: "Q14", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS AND ATTND PNL", cb: "M14", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS PROG & TST PNL (A319 ONLY)", cb: "M7", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS PROG & TST PNL", cb: "M6", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DIR 1 BAT(IF INSTALLED)", cb: "P13", loc: "121 VU", chapter: "com" },
+{ desc: "CIDS DIR 1 BAT(IF INSTALLED)", cb: "P14", loc: "121 VU", chapter: "com" },
+{ desc: "CVR CTL", cb: "E13", loc: "49 VU", chapter: "com" },
+{ desc: "CVR SPLY", cb: "E14", loc: "49 VU", chapter: "com" },
+{ desc: "HF 1", cb: "HA14", loc: "49 VU", chapter: "com" },
+{ desc: "HORN SPLY", cb: "P9", loc: "121 VU", chapter: "com" },
+{ desc: "LOUD SPKR CAPT", cb: "F10", loc: "49 VU", chapter: "com" },
+{ desc: "LOUD SPKR F/O", cb: "P8", loc: "121 VU", chapter: "com" },
+{ desc: "RMP 1", cb: "G10", loc: "49 VU", chapter: "com" },
+{ desc: "RMP 2", cb: "L2", loc: "121 VU", chapter: "com" },
+{ desc: "RMP 3", cb: "L3", loc: "121 VU", chapter: "com" },
+{ desc: "SELCAL", cb: "M4", loc: "121 VU", chapter: "com" },
+{ desc: "VHF1", cb: "G9", loc: "49 VU", chapter: "com" },
+{ desc: "VHF2", cb: "L4", loc: "121 VU", chapter: "com" },
+{ desc: "VHF3", cb: "L5", loc: "121 VU", chapter: "com" },
+
+
+
+//Chapter 24
+
+{ desc: "101 PP SPLY", cb: "CD1", loc: "125VU", chapter: "ele" },
+{ desc: "103 PP SPLY", cb: "CE1", loc: "125 VU", chapter: "ele" },
+{ desc: "131 XP-A SPLY", cb: "AB12", loc: "123VU", chapter: "ele" },
+{ desc: "202 PP SPLY", cb: "BG1", loc: "124 VU", chapter: "ele" },
+{ desc: "204 PP SPLY", cb: "BF1", loc: "124 VU", chapter: "ele" },
+{ desc: "206 PP/2", cb: "BE1", loc: "124 VU", chapter: "ele" },
+{ desc: "AC BUS 1 CTL", cb: "V25", loc: "122 VU", chapter: "ele" },
+{ desc: "AC BUS 2 CTL", cb: "V27", loc: "122 VU", chapter: "ele" },
+{ desc: "AC BUS 8XP MONG", cb: "H11", loc: "49 VU", chapter: "ele" },
+{ desc: "AC ESS BUS ON BUS 1", cb: "AC12", loc: "123VU", chapter: "ele" },
+{ desc: "AC ESS BUS ON BUS 2", cb: "AC1", loc: "123 VU", chapter: "ele" },
+{ desc: "AC POWER SVCE CTL", cb: "V29", loc: "122 VU", chapter: "ele" },
+{ desc: "AFT GALLEY FEEDER A", cb: "AF4", loc: "123VU", chapter: "ele" },
+{ desc: "AFT GALLEY FEEDER B", cb: "AD9", loc: "123 VU", chapter: "ele" },
+{ desc: "AFT GALLEY FEEDER E", cb: "AF9", loc: "123 Vu", chapter: "ele" },
+{ desc: "APU GCU", cb: "Y25", loc: "122 Vu", chapter: "ele" },
+{ desc: "APU GEN EGIU 2 (115 VAC)", cb: "AA8", loc: "123 VU", chapter: "ele" },
+{ desc: "BAT BUS 301 PP SPLY", cb: "CC1", loc: "125 VU", chapter: "ele" },
+{ desc: "BUS 1 / 101 XP SPLY", cb: "AD11", loc: "123VU", chapter: "ele" },
+{ desc: "BUS 1 / 103 XP SPLY", cb: "AB11", loc: "123 VU", chapter: "ele" },
+{ desc: "BUS 1 / 110 XP SPLY", cb: "AF11", loc: "123 VU", chapter: "ele" },
+{ desc: "BUS 2 / 202 XP SPLY", cb: "AD2", loc: "123VU", chapter: "ele" },
+{ desc: "BUS 2 / 204 XP SPLY", cb: "AB2", loc: "123 VU", chapter: "ele" },
+{ desc: "BUS 2 / 210 XP SPLY", cb: "AF2", loc: "123VU", chapter: "ele" },
+{ desc: "BUS 2 / 212 XP SPLY", cb: "AD3", loc: "123 VU", chapter: "ele" },
+{ desc: "BUS 2 / 231 XP-A SPLY", cb: "AB1", loc: "123 VU", chapter: "ele" },
+{ desc: "CNTOR DC BUS TIE 1", cb: "W25", loc: "122 vu", chapter: "ele" },
+{ desc: "CNTOR DC BUS TIE 1 FAULT", cb: "U24", loc: "122 vu", chapter: "ele" },
+{ desc: "CNTOR ESS DC BUS TIE", cb: "W26", loc: "122 VU", chapter: "ele" },
+{ desc: "DC SVCE 6 PP SPLY", cb: "BD1", loc: "124 VU", chapter: "ele" },
+{ desc: "DC SVCE BUS", cb: "X24", loc: "122 VU", chapter: "ele" },
+{ desc: "DC SVCE BUS ON TR 2", cb: "U30", loc: "122 VU", chapter: "ele" },
+{ desc: "EMERG GEN AUTO 1", cb: "Z25", loc: "122 VU", chapter: "ele" },
+{ desc: "EMERG GEN AUTO 2", cb: "Z26", loc: "122 VU", chapter: "ele" },
+
+{ desc: "EXT PWR COCKPIT AVAIL LT", cb: "X28", loc: "122 VU", chapter: "ele" },
+{ desc: "EXT PWR CTL", cb: "X29", loc: "122 VU", chapter: "ele" },
+{ desc: "EXT PWR EGIU 1(115 VAC)", cb: "AA7", loc: "123 VU", chapter: "ele" },
+{ desc: "EXT PWR LT CTL AVAIL", cb: "X31", loc: "122 VU", chapter: "ele" },
+{ desc: "EXT PWR LT GIL NOT IN USE", cb: "X30", loc: "122 VU", chapter: "ele" },
+{ desc: "FWD GALLEY FEEDER C", cb: "AE10", loc: "123 VU", chapter: "ele" },
+{ desc: "FWD GALLEY FEEDER D", cb: "AD4", loc: "123 VU", chapter: "ele" },
+{ desc: "FWD GALLEY FEEDER F", cb: "AC10", loc: "123 VU", chapter: "ele" },
+{ desc: "GALLEY CNTOR", cb: "S28", loc: "122 VU", chapter: "ele" },
+{ desc: "GALLEY CTL", cb: "S26", loc: "122 VU", chapter: "ele" },
+{ desc: "GALLEY FAULT LT CTL", cb: "S25", loc: "122 VU", chapter: "ele" },
+{ desc: "GALLEY GND/FLT LOGIC", cb: "S24", loc: "122 VU", chapter: "ele" },
+{ desc: "GCU 1", cb: "T26", loc: "122 VU", chapter: "ele" },
+{ desc: "GCU 2", cb: "T27", loc: "122 VU", chapter: "ele" },
+{ desc: "GEN 1 EGIU 1 (115 VAC)", cb: "AF12", loc: "123 VU", chapter: "ele" },
+{ desc: "GEN 1 EXT PWR EGCIU 1 (28 VDC)", cb: "Z30", loc: "122 VU", chapter: "ele" },
+{ desc: "GEN 1 EXT PWR EGCIU 1 (28 VDC)", cb: "Z31", loc: "122 VU", chapter: "ele" },
+{ desc: "GEN 1 OFF/BTC 1 SPLY", cb: "T28", loc: "122 VU", chapter: "ele" },
+{ desc: "GEN 1 OFF/BTC 2 SPLY", cb: "T30", loc: "122 VU", chapter: "ele" },
+{ desc: "GEN 2 APU GEN EGIU 2 (28 VDC)", cb: "Y30", loc: "122 VU", chapter: "ele" },
+{ desc: "GEN 2 APU GEN EGIU 2 (28 VDC)", cb: "Y31", loc: "122 VU", chapter: "ele" },
+{ desc: "GEN 2 EGIU (115 VAC)", cb: "AF1", loc: "123 VU", chapter: "ele" },
+{ desc: "GEN 2 OFF/BTC 1 SPLY", cb: "T29", loc: "122 VU", chapter: "ele" },
+{ desc: "GEN 2 OFF/BTC 2 SPLY", cb: "T31", loc: "122 VU", chapter: "ele" },
+
+{ desc: "GND PWR PROT", cb: "AB7", loc: "123 VU", chapter: "ele" },
+{ desc: "GPCU(CLASSIC)", cb: "Y24", loc: "122 VU", chapter: "ele" },
+{ desc: "GAPCU(CENHANCED)", cb: "W24", loc: "122 VU", chapter: "ele" },
+{ desc: "IDG 1DISC", cb: "T24", loc: "122 VU", chapter: "ele" },
+{ desc: "IDG 2 DISC", cb: "T25", loc: "122 VU", chapter: "ele" },
+{ desc: "LT CTL", cb: "H10", loc: "49 VU", chapter: "ele" },
+{ desc: "REFLNG NORM", cb: "S27", loc: "122 VU", chapter: "ele" },
+{ desc: "REFLNG ON BAT", cb: "U28", loc: "122 VU", chapter: "ele" },
+{ desc: "RFL SPLY LOGIC", cb: "U29", loc: "122 VU", chapter: "ele" },
+{ desc: "SHED BUS 210 PP / 212 PP SPLY (A319 ONLY)", cb: "BA1", loc: "124 VU", chapter: "ele" },
+{ desc: "SHED BUS 218 XP / 220 XP SPLY (A319 ONLY)", cb: "AC2", loc: "123 VU", chapter: "ele" },
+{ desc: "SVCE 601 PP / 602 PPSPLY", cb: "BB1", loc: "124 VU", chapter: "ele" },
+{ desc: "SVCE BUS 2 / 212 XP SPLY", cb: "AB5", loc: "123 VU", chapter: "ele" },
+{ desc: "SVCE BUS 2 / 214 XP SPLY", cb: "AA5", loc: "123 VU", chapter: "ele" },
+{ desc: "TA 1 FAULT DC BUS TIE CONFIG", cb: "W29", loc: "122 VU", chapter: "ele" },
+{ desc: "TR 1 MONG", cb: "X25", loc: "122 VU", chapter: "ele" },
+{ desc: "TR 1 SPLY", cb: "AB10", loc: "123 VU", chapter: "ele" },
+{ desc: "TR 2 CNTOR", cb: "BC1", loc: "124 VU", chapter: "ele" },
+{ desc: "TA 2 FAULT DC BUS TIE CONFIG", cb: "W30", loc: "122 VU", chapter: "ele" },
+{ desc: "TR 2 MONG", cb: "X26", loc: "122 VU", chapter: "ele" },
+{ desc: "TR 1 CNTOR SPLY", cb: "CF1", loc: "125 VU", chapter: "ele" },
+{ desc: "TR 2 / 214XPSPLY", cb: "AB4", loc: "123 VU", chapter: "ele" },
+{ desc: "TR 2 / SVCE BUS 2 SPLY", cb: "AB8", loc: "123 VU", chapter: "ele" },
+
+
+
+//Chapter 25
+
+
+{ desc: "COCKPIT SEAT CTL CPT", cb: "U11", loc: "122 VU", chapter: "equip" },
+{ desc: "COCKPIT SEAT CTL F/O", cb: "U14", loc: "122 VU", chapter: "equip" },
+{ desc: "AIR CONDT COMPT OUTLET", cb: "G8", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CABIN LIGHT POWER CEILING AFT", cb: "H7", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CABIN LIGHT POWER CEILING AFT", cb: "H8", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CABIN LIGHT POWER CEILING FWD", cb: "H5", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CABIN LIGHT POWER CEILING FWD", cb: "H6", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CABIN LIGHT POWER WINDOW AFT", cb: "H3", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CABIN LIGHT POWER WINDOW AFT", cb: "H4", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CABIN LIGHT POWER WINDOW FWD", cb: "H1", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CABIN LIGHT POWER WINDOW FWD", cb: "H2", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CONVERTIBLE SEATS", cb: "D3", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CONVERTIBLE SEATS", cb: "D5", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "CONVERTIBLE SEATS", cb: "D8", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "LAV FWD HOT WATER", cb: "F2", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "LAV FWD OCCUPIED", cb: "F1", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "LIGHT ATTND WORK", cb: "J3", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "LIGHT CABIN ENTRY", cb: "J2", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "LIGHT CARGO COMPT AFT", cb: "J7", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "LIGHT CARGO COMPT FWD", cb: "J6", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "LIGHT LAV", cb: "J1", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "LIGHT LDG AREA", cb: "J8", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PASSENGER READING LIGHT", cb: "G1", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PASSENGER READING LIGHT", cb: "G2", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PASSENGER READING LIGHT", cb: "G3", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PASSENGER READING LIGHT", cb: "G4", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PASSENGER READING LIGHT", cb: "G5", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PASSENGER READING LIGHT", cb: "G6", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PES PVIS", cb: "C6", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PES VIDEO CABIN LH", cb: "C3", loc: "FWD CEILING", chapter: "equip" },
+
+{ desc: "PES VIDEO CABIN RH", cb: "C4", loc: "CEILING", chapter: "equip" },
+{ desc: "PES VIDEO VCC CTL", cb: "C1", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PES VIDEO VCC CTL", cb: "C2", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "POT / WASTE WIP DRAIN MAST FWD", cb: "B6", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "POT / WASTE WIP HEATHER CTL", cb: "A1", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "POT / WASTE WIP HEATHER LINE", cb: "A2", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "PRAM", cb: "E1", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "SEMI AUTO CLS FWD", cb: "E6", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "SEMI AUTO CLS FWD", cb: "E8", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "VACUUM CLEANER SOCKET CABIN Z222", cb: "F7", loc: "FWD CEILING", chapter: "equip" },
+{ desc: "LAVATORY AFTER HOT WATER D", cb: "B2", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "LAVATORY AFTER HOT WATER E", cb: "B3", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "LAVATORY AFTER OCCUPIED", cb: "B4", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "LAVATORY SHAVER SOCKET", cb: "B1", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "LIGHT APU", cb: "E8", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "LIGHT SEC19", cb: "E7", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "POT WIP SVCE PANEL", cb: "D1", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "SEMI AUTO CLS AFT", cb: "D6", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "SEMI AUTO CLS AFT", cb: "D8", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "VACUUM CABIN Z261", cb: "F6", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "VACUUM GEN", cb: "A8", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "VACUUM SYSTEM", cb: "A6", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "VACUUM TOILET SYSTEM LAVATORY PWR", cb: "A2", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "VACUUM TOILET SYSTEM LAVATORY PWR A", cb: "A1", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "VACUUM TOILET SYSTEM LAVATORY PWR D", cb: "A3", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "VACUUM TOILET SYSTEM LAVATORY PWR E", cb: "A4", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "WASTE WIP DRAIN MASTE AFT", cb: "E1", loc: "AFT CEILING", chapter: "equip" },
+{ desc: "WATER SYST DRAIN", cb: "B5", loc: "AFT CEILING", chapter: "equip" },
+
+
+//Chapter 26
+
+{ desc: "CARGO FIRE EXTIG", cb: "T19", loc: "122 VU", chapter: "fire" },
+{ desc: "CIDS SDF DIR 1 ESS(ENHANCED)", cb: "C5", loc: "49 VU", chapter: "fire" },
+{ desc: "CIDS SDF DIR 2 ESS(ENHANCED)", cb: "C6", loc: "49 VU", chapter: "fire" },
+{ desc: "SDCU CHAN 1 (AFT CARGO VENT)", cb: "C6", loc: "49 VU", chapter: "fire" },
+{ desc: "CIDS SDF DIR 1 NORM(ENHANCED)", cb: "T17", loc: "122 VU", chapter: "fire" },
+{ desc: "CIDS SDF DIR 2 NORM(ENHANCED)", cb: "T18", loc: "122 VU", chapter: "fire" },
+{ desc: "SDCU CHAN 2", cb: "T18", loc: "122 VU", chapter: "fire" },
+
+
+//Chapter 27
+
+{ desc: "ELAC 1 NORM SPLY", cb: "B11", loc: "49 VU", chapter: "flight" },
+{ desc: "ELAC 1 STBY SPLY", cb: "A02", loc: "105 VU", chapter: "flight" },
+{ desc: "ELAC 2 NORM SPLY", cb: "R20", loc: "121 VU", chapter: "flight" },
+{ desc: "ELAC 2 STBY SPLY", cb: "A01", loc: "105 VU", chapter: "flight" },
+{ desc: "FCDC 1 SPLY", cb: "B10", loc: "49 VU", chapter: "flight" },
+{ desc: "FCDC 2 SPLY", cb: "Q20", loc: "121 VU", chapter: "flight" },
+{ desc: "FLP CTL & MONG SYS 2", cb: "Q21", loc: "121 VU", chapter: "flight" },
+{ desc: "FLP CTL & MONO SYS 1", cb: "B7", loc: "49 VU", chapter: "flight" },
+{ desc: "SEC 1 NORM SPLY", cb: "B8", loc: "49 VU", chapter: "flight" },
+{ desc: "SEC 2 SPLY", cb: "Q18", loc: "121 VU", chapter: "flight" },
+{ desc: "SEC 3 SPLY", cb: "Q19", loc: "121 VU", chapter: "flight" },
+{ desc: "SLT CTL & MONO SYS 1", cb: "B6", loc: "49 VU", chapter: "flight" },
+{ desc: "SLT CTL SYS 2", cb: "R21", loc: "121 VU", chapter: "flight" },
+{ desc: "SLT FLP 1 POS IND", cb: "B12", loc: "49 VU", chapter: "flight" },
+{ desc: "SLT FLP 2 POS IND", cb: "P16", loc: "121 VU", chapter: "flight" },
+{ desc: "THS ACTR MOT 1", cb: "Q16", loc: "121 VU", chapter: "flight" },
+{ desc: "THS ACTR MOT 2", cb: "B9", loc: "49 VU", chapter: "flight" },
+{ desc: "THS ACTR MOT 3", cb: "Q17", loc: "121 VU", chapter: "flight" },
+{ desc: "WTB FLP SYS 1", cb: "S7", loc: "122 VU", chapter: "flight" },
+{ desc: "WTB SLT SYS 1", cb: "S6", loc: "122 VU", chapter: "flight" },
+{ desc: "WTB SYS 2 FLP", cb: "P20", loc: "121 VU", chapter: "flight" },
+{ desc: "WTB SYS 2 SLT", cb: "P19", loc: "121 VU", chapter: "flight" },
+
+
+//Chapter 28
+
+{ desc: "CTR TK AUTO CTL", cb: "R27", loc: "121 VU", chapter: "fuel" },
+{ desc: "CTR TK PUMP 1 & 2 CTL & IND", cb: "R25", loc: "121 VU", chapter: "fuel" },
+{ desc: "CTR TK PUMP 1 & 2 CTL & IND", cb: "R26", loc: "121 VU", chapter: "fuel" },
+{ desc: "CTR TK PUMP 1 SPLY", cb: "P23", loc: "121 VU", chapter: "fuel" },
+{ desc: "CTR TK PUMP 2 SPLY", cb: "P26", loc: "121 VU", chapter: "fuel" },
+{ desc: "FQI CHAN 1", cb: "A13", loc: "49 VU", chapter: "fuel" },
+{ desc: "FQI CHAN 1 & 2", cb: "L26", loc: "121 VU", chapter: "fuel" },
+{ desc: "FQI CHAN 2", cb: "M27", loc: "121 VU", chapter: "fuel" },
+{ desc: "FWD LOW LVL WING L (A319 ONLY)", cb: "M22", loc: "121 VU", chapter: "fuel" },
+{ desc: "FWD LOW LVL WING A (A319 ONLY)", cb: "M23", loc: "121 VU", chapter: "fuel" },
+{ desc: "HI LVL SPLY", cb: "L25", loc: "121 VU", chapter: "fuel" },
+{ desc: "L WING TK PUMP 1 SPLY", cb: "N23", loc: "121 VU", chapter: "fuel" },
+{ desc: "L WING TK PUMP 1 STBY SPLY", cb: "AD12", loc: "123 VU", chapter: "fuel" },
+{ desc: "L WING TK PUMP 2 SPLY", cb: "N26", loc: "121 VU", chapter: "fuel" },
+{ desc: "LP VALVE MOT 1 ENG 1", cb: "A8", loc: "49 VU", chapter: "fuel" },
+{ desc: "LP VALVE MOT 1 ENG 2", cb: "A9", loc: "49 VU", chapter: "fuel" },
+{ desc: "LP VALVE MOT 2 ENG 1", cb: "M25", loc: "121 VU", chapter: "fuel" },
+{ desc: "LP VALVE MOT 2 ENG 2", cb: "M26", loc: "121 VU", chapter: "fuel" },
+{ desc: "PUMP 1 L CTL & R IND", cb: "R23", loc: "121 VU", chapter: "fuel" },
+{ desc: "PUMP 1 R CTL & L IND", cb: "R28", loc: "121 VU", chapter: "fuel" },
+{ desc: "PUMP 2 L CTL & R IND", cb: "R24", loc: "121 VU", chapter: "fuel" },
+{ desc: "PUMP 2 R CTL & L IND", cb: "R29", loc: "121 VU", chapter: "fuel" },
+{ desc: "R WING TK PUMP 1 SPLY", cb: "Q23", loc: "121 VU", chapter: "fuel" },
+{ desc: "R WING TK PUMP 1 STBY SPLY", cb: "AE12", loc: "123 VU", chapter: "fuel" },
+{ desc: "R WING TK PUMP 2 SPLY", cb: "Q26", loc: "121 VU", chapter: "fuel" },
+{ desc: "RFL / DFL SPLY", cb: "L24", loc: "121 VU", chapter: "fuel" },
+{ desc: "RFL / DFL XFR DEFUEL VALVE", cb: "L23", loc: "121 VU", chapter: "fuel" },
+{ desc: "SMOKE CONFIG PUMP CTL", cb: "A14", loc: "49 VU", chapter: "fuel" },
+{ desc: "X FEED VALVE MOT 1", cb: "A12", loc: "49 VU", chapter: "fuel" },
+{ desc: "X FEED VALVE MOT 2", cb: "M24", loc: "121 VU", chapter: "fuel" },
+{ desc: "XFR VALVE 1 WING L", cb: "A10", loc: "49 VU", chapter: "fuel" },
+{ desc: "XFR VALVE 1 WING R", cb: "A11", loc: "49 VU", chapter: "fuel" },
+{ desc: "XFR VALVE 2 WING L", cb: "M22", loc: "121 VU", chapter: "fuel" },
+{ desc: "XFR VALVE 2 WING R", cb: "M23", loc: "121 VU", chapter: "fuel" },
+
+//Chapter 29
+{ desc: "B HYD ELEC PUMP", cb: "AB9", loc: "123 VU", chapter: "hyd" },
+{ desc: "B RSVR AIR PRESS XTMR", cb: "P34", loc: "121 VU", chapter: "hyd" },
+{ desc: "G HYD PUMP ENG 1 CTL", cb: "R35", loc: "121 VU", chapter: "hyd" },
+{ desc: "G HYD PUMP ENG 1 MONG", cb: "R34", loc: "121 VU", chapter: "hyd" },
+{ desc: "HYD FIRE VALVE G ENG 1", cb: "C13", loc: "49 VU", chapter: "hyd" },
+{ desc: "HYD FIRE VALVE Y ENG 2", cb: "C14", loc: "49 VU", chapter: "hyd" },
+{ desc: "HYD POWER Y", cb: "N30", loc: "121 VU", chapter: "hyd" },
+{ desc: "HYD PRESS XMTR", cb: "C11", loc: "49 VU", chapter: "hyd" },
+{ desc: "HYD PWR B WARN & CTL", cb: "C12", loc: "49 VU", chapter: "hyd" },
+{ desc: "HYD QTY IND", cb: "P35", loc: "121 VU", chapter: "hyd" },
+{ desc: "LOW LVL IND", cb: "N32", loc: "121 VU", chapter: "hyd" },
+{ desc: "RAT CTL", cb: "P32", loc: "121 VU", chapter: "hyd" },
+{ desc: "RAT CTL", cb: "D14", loc: "49 VU", chapter: "hyd" },
+{ desc: "RAT EXTN SOL 1", cb: "P33", loc: "121 VU", chapter: "hyd" },
+{ desc: "SQL VALVES GJY PTU", cb: "N34", loc: "121 VU", chapter: "hyd" },
+{ desc: "SOL VALVES G / Y / B LEAK TST", cb: "N35", loc: "121 VU", chapter: "hyd" },
+{ desc: "Y HYD ELEC PUMP", cb: "AB6", loc: "123 VU", chapter: "hyd" },
+{ desc: "Y HYD ELEC PUMP NORM", cb: "AB3", loc: "123 VU", chapter: "hyd" },
+{ desc: "Y HYD PUMP ENG 2 CTL", cb: "Q36", loc: "121 VU", chapter: "hyd" },
+{ desc: "Y HYD PUMP ENG 2 MONG", cb: "Q37", loc: "121 VU", chapter: "hyd" },
+
+
+
+//Chapter 30
+
+{ desc: "ANTI-ICE ENG 1", cb: "X10", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE ENG 2", cb: "W10", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE L WSHLD", cb: "AF10", loc: "123 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES AOA 1", cb: "D4", loc: "49 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES PHC 1", cb: "D3", loc: "49 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES PITOT 1", cb: "D2", loc: "49 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 1 STATIC", cb: "Z13", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 1 TAT", cb: "Z12", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 2 AOA", cb: "Y13", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 2 PHC", cb: "Y12", loc: "122 VU", chapter: "ice" },
+{ desc: "ICE DET L", cb: "V12", loc: "122 VU", chapter: "ice" },
+{ desc: "ICE DET R", cb: "V13", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 2 PITOT", cb: "Y14", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 2 STATIC", cb: "Y11", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 2 TAT", cb: "Y15", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 3 AOA", cb: "Z15", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 3 PITOT", cb: "Z16", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES 3 STATIC", cb: "Z14", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE PROBES PHC 3", cb: "Y16", loc: "122 VU", chapter: "ice" },
+{ desc: "ANTI-ICE R WSHLD", cb: "AF3", loc: "123 VU", chapter: "ice" },
+{ desc: "FOOT WARMER", cb: "X15", loc: "122 VU", chapter: "ice" },
+{ desc: "RAIN RPLNT CAPT", cb: "D1", loc: "49 VU", chapter: "ice" },
+{ desc: "RAIN RPLNT F/O", cb: "W11", loc: "122 VU", chapter: "ice" },
+{ desc: "WHC 1", cb: "X13", loc: "122 VU", chapter: "ice" },
+{ desc: "WHC2", cb: "W13", loc: "122 VU", chapter: "ice" },
+{ desc: "WINDOWS L", cb: "X14", loc: "122 VU", chapter: "ice" },
+{ desc: "WINDOWS R", cb: "W14", loc: "122 VU", chapter: "ice" },
+{ desc: "WING CTL", cb: "C2", loc: "49 VU", chapter: "ice" },
+{ desc: "WING MONG", cb: "C1", loc: "49 VU", chapter: "ice" },
+{ desc: "WIPER CAPT", cb: "X12", loc: "122 VU", chapter: "ice" },
+{ desc: "WIPER F/O", cb: "W11", loc: "122 VU", chapter: "ice" },
+
+//Chapter 31 
+
+{ desc: "AIDS – DMU & QAR", cb: "K15", loc: "121 VU", chapter: "indication" },
+{ desc: "CFDS – CFDIU BACK-UP", cb: "J17", loc: "121 VU", chapter: "indication" },
+{ desc: "CFDS – CFDIU SPLY", cb: "J18", loc: "121 VU", chapter: "indication" },
+{ desc: "CFDS TEST PLUG 1", cb: "J19", loc: "121 VU", chapter: "indication" },
+{ desc: "CFDS TEST PLUG 2", cb: "J20", loc: "121 VU", chapter: "indication" },
+{ desc: "CLOCK STBY SPLY", cb: "N3", loc: "121 VU", chapter: "indication" },
+{ desc: "DATA LOADER SPLY", cb: "J16", loc: "121 VU", chapter: "indication" },
+{ desc: "DLS & DLBR SPL Y", cb: "J15", loc: "121 VU", chapter: "indication" },
+{ desc: "DMC 1 SPLY", cb: "E11", loc: "49 VU", chapter: "indication" },
+{ desc: "DMC 1 SWTG", cb: "E9", loc: "49 VU", chapter: "indication" },
+{ desc: "DMC 2 SPLY", cb: "Q8", loc: "121 VU", chapter: "indication" },
+{ desc: "DMC 2 SWTG", cb: "R8", loc: "121 VU", chapter: "indication" },
+{ desc: "DMC 3 SPLY", cb: "Q9", loc: "121 VU", chapter: "indication" },
+{ desc: "DMC 3 STBY SPLY", cb: "E10", loc: "49 VU", chapter: "indication" },
+{ desc: "DMC 3 SWTG", cb: "E7", loc: "49 VU", chapter: "indication" },
+{ desc: "ECAM CTL PNL", cb: "E12", loc: "49VU", chapter: "indication" },
+{ desc: "ECAM DU LOWER SPLY", cb: "R11", loc: "121 VU", chapter: "indication" },
+{ desc: "ECAM DU LOWER SWTG", cb: "R10", loc: "121 VU", chapter: "indication" },
+{ desc: "ECAM DU UPPER SPLY", cb: "E5", loc: "49 VU", chapter: "indication" },
+{ desc: "ECAM DU UPPER STWG", cb: "E6", loc: "49 VU", chapter: "indication" },
+{ desc: "FWC 1", cb: "F1", loc: "49 VU", chapter: "indication" },
+{ desc: "FWC 2 SPLY", cb: "Q7", loc: "121 VU", chapter: "indication" },
+{ desc: "GPWS (115 VAC)", cb: "P7", loc: "121 VU", chapter: "indication" },
+{ desc: "GPWS (28 VDC)", cb: "P6", loc: "121 VU", chapter: "indication" },
+{ desc: "ND CAPT SPLY", cb: "E1", loc: "49 VU", chapter: "indication" },
+{ desc: "ND CAPT SWTG", cb: "E2", loc: "49 VU", chapter: "indication" },
+{ desc: "NDF/O", cb: "R4", loc: "121 VU", chapter: "indication" },
+{ desc: "ND F/O SWTG", cb: "R6", loc: "121 VU", chapter: "indication" },
+{ desc: "PFD CAPT SPLY", cb: "E3", loc: "49 VU", chapter: "indication" },
+{ desc: "PFD CAPT SWTG", cb: "E4", loc: "49 VU", chapter: "indication" },
+{ desc: "PFD F/O", cb: "R3", loc: "121 VU", chapter: "indication" },
+{ desc: "PFD F/O SWTG", cb: "R5", loc: "121 VU", chapter: "indication" },
+{ desc: "PTR SPLY", cb: "J21", loc: "121 VU", chapter: "indication" },
+{ desc: "RCDR-ACCLRM", cb: "K18", loc: "121 VU", chapter: "indication" },
+{ desc: "RCDR - DFDR", cb: "K16", loc: "121 VU", chapter: "indication" },
+{ desc: "RCDR - FDIU & QAR", cb: "K17", loc: "121 VU", chapter: "indication" },
+{ desc: "RLY BOX CAPT", cb: "E8", loc: "121 VU", chapter: "indication" },
+{ desc: "RLY BOX F/O", cb: "R7", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC1 & 2 28 VDC ESS BUS", cb: "F5", loc: "49 VU", chapter: "indication" },
+{ desc: "SDAC1 & 2 BUS 1 28 VDC", cb: "P4", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC1 & 2 BUS 1 26 CAC SYNC AC", cb: "Q4", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC1 & 2 BUS 2 28VDC", cb: "P3", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC1 & 2 BUS 2", cb: "Q3", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC 1 & 2 DOOR DET AVNCS", cb: "P2", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC 1 & 2 DOOR DET PAX", cb: "P5", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC 1 SPLY", cb: "F4", loc: "49 VU", chapter: "indication" },
+{ desc: "SDAC 2 SPLY", cb: "Q5", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC 2 26VAC SYNC AC", cb: "Q2", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC 2 SPLY", cb: "Q6", loc: "121 VU", chapter: "indication" },
+{ desc: "SDAC 2 SYN CBUS", cb: "F3", loc: "49 VU", chapter: "indication" },
+
+//Chapter 32 Landing Gear
+
+{ desc: "BRAKING & STEERING SYS 1 CTL", cb: "M34", loc: "121 VU", chapter: "landing" },
+{ desc: "BRAKING & STEERING SYS 1 IND & SPLY", cb: "M33", loc: "121 VU", chapter: "landing" },
+{ desc: "BRAKING & STEERING SYS 2 SPLY", cb: "M36", loc: "121 VU", chapter: "landing" },
+{ desc: "BRAKING & STEERING SYS 2 CTL", cb: "M35", loc: "121 VU", chapter: "landing" },
+{ desc: "BRK FAN CTL", cb: "M32", loc: "121 VU", chapter: "landing" },
+{ desc: "BRK FAN WHEELS 1 & 2", cb: "L32", loc: "121 VU", chapter: "landing" },
+{ desc: "BRK FAN WHEELS 3 & 4", cb: "L35", loc: "121 VU", chapter: "landing" },
+{ desc: "BRK TEMP DET UNIT", cb: "M37", loc: "121 VU", chapter: "landing" },
+{ desc: "LGCIU SYS 1", cb: "C9", loc: "49 VU", chapter: "landing" },
+{ desc: "LGCIU SYS 1 GND SPLY", cb: "Q34", loc: "121 VU", chapter: "landing" },
+{ desc: "LGCIU SYS 2", cb: "Q35", loc: "121 VU", chapter: "landing" },
+{ desc: "PARK BRK CTL NORM", cb: "N36", loc: "121 VU", chapter: "landing" },
+{ desc: "PARK BRK CTL STBY", cb: "N37", loc: "121 VU", chapter: "landing" },
+{ desc: "TIRE PRESS", cb: "M31", loc: "121 VU", chapter: "landing" },
+{ desc: "Y BRK PRESS IND", cb: "C10", loc: "49 VU", chapter: "landing" },
+
+//Chapter 33 lighting
+
+{ desc: "ANN LT SPLY XFMR BUS 1", cb: "X4", loc: "122 VU", chapter: "lighting" },
+{ desc: "ANN LT SPLY XFMR BUS 2", cb: "X5", loc: "122 VU", chapter: "lighting" },
+{ desc: "ANN LI SPLY XFMR STAT INV", cb: "X3", loc: "122 VU", chapter: "lighting" },
+{ desc: "AVNCS COMPT DOME", cb: "Z7", loc: "122 VU", chapter: "lighting" },
+{ desc: "AVNCS COMPT OUT (115 VAC)", cb: "Z9", loc: "122 VU", chapter: "lighting" },
+{ desc: "AVNCS COMPI OUT (28 VDC)", cb: "Z8", loc: "122 VU", chapter: "lighting" },
+{ desc: "BEACON LOWER", cb: "U3", loc: "122 VU", chapter: "lighting" },
+{ desc: "BEACON UPPER", cb: "U6", loc: "122 VU", chapter: "lighting" },
+{ desc: "CABIN EMER LT", cb: "V7", loc: "122 VU", chapter: "lighting" },
+{ desc: "CKPT DOME", cb: "Y6", loc: "122 VU", chapter: "lighting" },
+{ desc: "EMER LT_CABIN", cb: "H5", loc: "49 VU", chapter: "lighting" },
+{ desc: "EMER LT_CABIN", cb: "H6", loc: "49 VU", chapter: "lighting" },
+{ desc: "EMER LT_CABIN", cb: "H7", loc: "49 VU", chapter: "lighting" },
+{ desc: "EMER LT CKPT DOME", cb: "H8", loc: "49 VU", chapter: "lighting" },
+{ desc: "EXT LT WING & ENG SCAN L", cb: "W2", loc: "122 VU", chapter: "lighting" },
+{ desc: "EXT LT WING & ENG SCAN R", cb: "W3", loc: "122 VU", chapter: "lighting" },
+{ desc: "FLOOD CAPT SIDE", cb: "Z5", loc: "122 VU", chapter: "lighting" },
+{ desc: "SDAC1 26VAC AC ESS", cb: "F2", loc: "49 VU", chapter: "lighting" },
+{ desc: "FLOOD CTR INST PNL", cb: "Z4", loc: "122 VU", chapter: "lighting" },
+{ desc: "FLOOD F/O SIDE", cb: "Z6", loc: "122 VU", chapter: "lighting" },
+{ desc: "INST LT MAIN INST GLARE SHLD", cb: "Y5", loc: "122 VU", chapter: "lighting" },
+{ desc: "INST LT MAIN INST OVHD PNL", cb: "Y3", loc: "122 VU", chapter: "lighting" },
+{ desc: "INST LT MAIN INST PNL & PED", cb: "Y4", loc: "122 VU", chapter: "lighting" },
+{ desc: "LANDING LT L CTL", cb: "T5", loc: "122 VU", chapter: "lighting" },
+{ desc: "LANDING LT L SPLY", cb: "T4", loc: "122 VU", chapter: "lighting" },
+{ desc: "LANDING LT R CTL", cb: "T7", loc: "122 VU", chapter: "lighting" },
+{ desc: "LANDING LT R SPLY", cb: "T6", loc: "122 VU", chapter: "lighting" },
+{ desc: "LOGO L", cb: "V3", loc: "122 VU", chapter: "lighting" },
+{ desc: "LOGO R", cb: "V2", loc: "122 VU", chapter: "lighting" },
+{ desc: "NAV 1 & LOGO LT", cb: "T3", loc: "122 VU", chapter: "lighting" },
+{ desc: "NAV 2 & LOGO LT", cb: "T2", loc: "122 VU", chapter: "lighting" },
+{ desc: "RWY TURN OFF L", cb: "W6", loc: "122 VU", chapter: "lighting" },
+{ desc: "RWY TURN OFF R", cb: "W5", loc: "122 VU", chapter: "lighting" },
+{ desc: "STBY COMP LT", cb: "H4", loc: "49 VU", chapter: "lighting" },
+{ desc: "TAXI & TAKE OFF - CTL", cb: "W9", loc: "122 VU", chapter: "lighting" },
+{ desc: "TAXI & TAKE OFF - TAXI", cb: "W8", loc: "122 VU", chapter: "lighting" },
+{ desc: "TAXI & TAKE OFF - TO", cb: "W7", loc: "122 VU", chapter: "lighting" },
+{ desc: "TST BOARD SPLY", cb: "X6", loc: "122 VU", chapter: "lighting" },
+{ desc: "WHL WELL LTG DOME", cb: "X8", loc: "122 VU", chapter: "lighting" },
+{ desc: "WHL WELL LTG OUT", cb: "X7", loc: "122 VU", chapter: "lighting" },
+{ desc: "WING STROBE", cb: "V5", loc: "122 VU", chapter: "lighting" },
+{ desc: "XFMR 115V.5V ESS BUS", cb: "H3", loc: "49 VU", chapter: "lighting" },
+
+//Chapter 34 Navigation
+
+{ desc: "ADF 1", cb: "H14", loc: "49 VU", chapter: "nav" },
+{ desc: "ADF 2", cb: "K02", loc: "121 VU", chapter: "nav" },
+{ desc: "ADIRU 1 & AOA 1 26 VAC", cb: "F7", loc: "49 VU", chapter: "nav" },
+{ desc: "ADIRU 1 (115 VAC)", cb: "F06", loc: "49 VU", chapter: "nav" },
+{ desc: "ADIRU 2 (115 VAC)", cb: "N6", loc: "121 VU", chapter: "nav" },
+{ desc: "ADIRU 2 (26 VAC & AOA)", cb: "N8", loc: "121 VU", chapter: "nav" },
+{ desc: "ADIRU 2 (28 VDC)", cb: "N4", loc: "121 VU", chapter: "nav" },
+{ desc: "ADIRU 2 PWR SHED", cb: "N10", loc: "121 VU", chapter: "nav" },
+{ desc: "ADIRU 3 (115 VAC)", cb: "N5", loc: "121 VU", chapter: "nav" },
+{ desc: "ADIRU 3 (26 VAC & AOA)", cb: "N7", loc: "121 VU", chapter: "nav" },
+{ desc: "ADIRU 3 (28 VDC)", cb: "N3", loc: "121 VU", chapter: "nav" },
+{ desc: "ADIRU 3 SWTG SPLY", cb: "F9", loc: "49 VU", chapter: "nav" },
+{ desc: "ATC 1", cb: "G11", loc: "49 VU", chapter: "nav" },
+{ desc: "ATC 2", cb: "K7", loc: "121 VU", chapter: "nav" },
+{ desc: "DME 1", cb: "G14", loc: "49 VU", chapter: "nav" },
+{ desc: "DME 2", cb: "K6", loc: "121 VU", chapter: "nav" },
+{ desc: "ILS 1", cb: "G12", loc: "49 VU", chapter: "nav" },
+{ desc: "ILS 2 (IF INSTALLED)", cb: "K9", loc: "121 VU", chapter: "nav" },
+{ desc: "MMR 1", cb: "G12", loc: "49 VU", chapter: "nav" },
+{ desc: "MMR 2", cb: "L7", loc: "121 VU", chapter: "nav" },
+{ desc: "RAD ALTM 1", cb: "K11", loc: "121 VU", chapter: "nav" },
+{ desc: "RAD ALTM 2", cb: "K12", loc: "121 VU", chapter: "nav" },
+{ desc: "RADAR 1", cb: "K13", loc: "121 VU", chapter: "nav" },
+{ desc: "RADAR 2", cb: "K14", loc: "121 VU", chapter: "nav" },
+{ desc: "STBY ALTM", cb: "F14", loc: "49 VU", chapter: "nav" },
+{ desc: "STBY INST", cb: "F12", loc: "49 VU", chapter: "nav" },
+{ desc: "TCAS", cb: "K10", loc: "121 VU", chapter: "nav" },
+{ desc: "VOR / ADF / DME RMI", cb: "F13", loc: "49 VU", chapter: "nav" },
+{ desc: "VOR1", cb: "G13", loc: "49 VU", chapter: "nav" },
+{ desc: "VOR2", cb: "K8", loc: "121 VU", chapter: "nav" },
+
+
+//Chapter 35 Oxygen
+
+{ desc: "CREW OXY SPLY", cb: "HA1", loc: "49 VU", chapter: "oxy" },
+{ desc: "PASSENGER ACTUATION", cb: "HA5", loc: "49 VU", chapter: "oxy" },
+{ desc: "PASSENGER ACTUATION", cb: "HA6", loc: "49 VU", chapter: "oxy" },
+{ desc: "PASSENGER ACTUATION", cb: "HA7", loc: "49 VU", chapter: "oxy" },
+{ desc: "PASSENGER ACTUATION", cb: "HA8", loc: "49 VU", chapter: "oxy" },
+{ desc: "PASSENGER CTL & WARN", cb: "HA2", loc: "49 VU", chapter: "oxy" },
+{ desc: "PASSENGER CTL & WARN", cb: "HA3", loc: "49 VU", chapter: "oxy" },
+{ desc: "PASSENGER CTL & WARN", cb: "HA4", loc: "49 VU", chapter: "oxy" },
+
+
+//Chapter 36 pneumatic
+
+{ desc: "AIR BLEED ENG 1 CTL", cb: "D12", loc: "49 VU", chapter: "pneumatic" },
+{ desc: "AIR BLEED ENG 1 MONG", cb: "D11", loc: "49 VU", chapter: "pneumatic" },
+{ desc: "AIR BLEED ENG 2 CTL", cb: "Z23", loc: "122 VU", chapter: "pneumatic" },
+{ desc: "AIR BLEED ENG 2 MONG", cb: "Z22", loc: "122 VU", chapter: "pneumatic" },
+{ desc: "X FEED VALVE BAT", cb: "D13", loc: "49 VU", chapter: "pneumatic" },
+{ desc: "X FEED VALVE NORM", cb: "Z20", loc: "122 VU", chapter: "pneumatic" },
+
+
+
+
+
+//Chapter 43 Information
+
+{ desc: "ATSU 1/SWTG", cb: "L14", loc: "121 VU", chapter: "info" },
+{ desc: "ATSU 1", cb: "L16", loc: "121 VU", chapter: "info" },
+
+//Chapter 47 Inert Gas
+
+{ desc: "IGGS CTRL", cb: "N28", loc: "121 VU", chapter: "igg" },
+
+
+//Chapter 49 APU
+
+{ desc: "APU CTL", cb: "L42", loc: "121 VU", chapter: "apu" },
+{ desc: "APU OIL HTR SPLY", cb: "K41", loc: "121 VU", chapter: "apu" },
+{ desc: "AUTO EXTIG GND TEST", cb: "L40", loc: "121 VU", chapter: "apu" },
+{ desc: "ECB SPLY", cb: "L41", loc: "121 VU", chapter: "apu" },
+{ desc: "FIRE & OVHT DET LOOP A", cb: "L43", loc: "121 VU", chapter: "apu" },
+{ desc: "FIRE & OVHT DET LOOP B", cb: "L44", loc: "121 VU", chapter: "apu" },
+{ desc: "FIRE EXTIG SQUIB A", cb: "L38", loc: "121 VU", chapter: "apu" },
+{ desc: "FIRE EXTIG SQUIB B", cb: "L39", loc: "121 VU", chapter: "apu" },
+{ desc: "FIRE LP VALVE NORM", cb: "M42", loc: "121 VU", chapter: "apu" },
+{ desc: "FIRE LP VALVE STBY", cb: "M41", loc: "121 VU", chapter: "apu" },
+{ desc: "FUEL BLOW OFF CTL", cb: "K39", loc: "121 VU", chapter: "apu" },
+{ desc: "FUEL BLOW OFF PUMP", cb: "B14", loc: "49 VU", chapter: "apu" },
+{ desc: "FUEL LP VALVE CTL", cb: "M40", loc: "121 VU", chapter: "apu" },
+{ desc: "FUEL LP VALVE SPLY", cb: "M39", loc: "121 VU", chapter: "apu" },
+{ desc: "FUEL PUMP CTL", cb: "M38", loc: "121 VU", chapter: "apu" },
+
+
+//Chapter 52 DOOR
+
+{ desc: "DOORS/CARGO", cb: "T12", loc: "122 VU", chapter: "door" },
+{ desc: "DOORS/PAX MONG", cb: "T13", loc: "122 VU", chapter: "door" },
+{ desc: "SLIDES ARM & WARN FLT", cb: "P11", loc: "121 VU", chapter: "door" },
+{ desc: "SLIDES ARM & WARN GND", cb: "P10", loc: "121 VU", chapter: "door" },
+
+
+//Chapter 70 Engine
+
+{ desc: "ENG 1 & 2 EVMU", cb: "R44", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 & 2 FIRE EXTIG BTL 1 SQWIB A", cb: "Q43", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 & 2 FIRE EXTIG BTL 1 SQWIB B", cb: "Q44", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 & 2 FIRE EXTIG BTL 2 SQWIB A", cb: "Q41", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 & 2 FIRE EXTIG BTL 2 SQWIB B", cb: "Q42", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 & 2 IGN SYS A", cb: "A3", loc: "49 VU", chapter: "eng" },
+{ desc: "ENG 1 FADEC A & EIU 1", cb: "A4", loc: "49 VU", chapter: "eng" },
+{ desc: "ENG 1 FADEC B & EIU 1", cb: "R41", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 FIRE DET LOOP A", cb: "A6", loc: "49 VU", chapter: "eng" },
+{ desc: "ENG 1 FIRE DET LOOP B", cb: "Q38", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 HP FUEL SOV", cb: "A1", loc: "49 VU", chapter: "eng" },
+{ desc: "ENG 1 OIL CHIP DET", cb: "N38", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 OIL PRESS", cb: "N40", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 OIL QTY", cb: "N39", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 1 REV LOCK", cb: "N44", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 2 FADEC A & EIU2", cb: "A5", loc: "49 VU", chapter: "eng" },
+{ desc: "ENG 2 FADEC B", cb: "Q40", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 2 FIRE DET LOOP A", cb: "Q39", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 2 FIRE DET LOOP B", cb: "A7", loc: "49 VU", chapter: "eng" },
+{ desc: "ENG 2 HP FUEL SOV", cb: "A2", loc: "49 VU", chapter: "eng" },
+{ desc: "ENG 2 OIL CHIP DET", cb: "N43", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 2 OIL PRESS", cb: "N42", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 2 OIL QTY", cb: "N41", loc: "121 VU", chapter: "eng" },
+{ desc: "ENG 2 REV LOCK", cb: "N45", loc: "121 VU", chapter: "eng" },
+{ desc: "IGN ENG 1 SYS A BAT", cb: "P39", loc: "121 VU", chapter: "eng" },
+{ desc: "IGN ENG 1 SYS B", cb: "P41", loc: "121 VU", chapter: "eng" },
+{ desc: "IGN ENG 2 SYS A BAT", cb: "P40", loc: "121 VU", chapter: "eng" },
+{ desc: "IGN ENG 2 SYS B", cb: "P42", loc: "121 VU", chapter: "eng" }
+
+
+
+
+        ];
+
+        let currentPage = 'pageMain';
+        let currentChapter = '';
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            currentPage = pageId;
+
+            // Manage back button visibility
+            const backBtn = document.getElementById('backBtn');
+            if (pageId === 'pageMain') {
+                backBtn.style.display = 'none';
+                document.getElementById('appTitle').innerText = "Chapters";
+            } else if (pageId === 'pageDetails') {
+                backBtn.style.display = 'block';
+                document.getElementById('appTitle').innerText = "Details";
+            } else if (pageId === 'pageSearch') {
+                backBtn.style.display = 'block';
+                document.getElementById('appTitle').innerText = "Search Results";
+            }
+        }
+
+        function openChapter(chapId) {
+            currentChapter = chapId;
+            const filtered = tableData.filter(item => item.chapter === chapId);
+            renderTable(filtered, 'detailsTableContainer');
+            showPage('pageDetails');
+        }
+
+        function renderTable(dataArray, containerId) {
+            const container = document.getElementById(containerId);
+            if (dataArray.length === 0) {
+                container.innerHTML = '<div class="no-results">No matching data found.</div>';
+                return;
+            }
+
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th style="width: 55%;">Description</th>
+                        <th style="width: 20%;">C/B</th>
+                        <th style="width: 25%;">Location</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            dataArray.forEach(row => {
+                html += `<tr>
+                    <td>${row.desc}</td>
+                    <td>${row.cb}</td>
+                    <td>${row.loc}</td>
+                </tr>`;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toUpperCase();
+            
+            if (query === '') {
+                if (currentChapter !== '' && currentPage === 'pageSearch') {
+                    showPage('pageDetails');
+                } else {
+                    showPage('pageMain');
+                }
+                return;
+            }
+
+            // High performance word-matching search algorithm inside Description
+            const filteredResults = tableData.filter(item => {
+                return item.desc.toUpperCase().includes(query);
+            });
+
+            renderTable(filteredResults, 'searchResultsContainer');
+            showPage('pageSearch');
+        }
+
+        function goBack() {
+            if (currentPage === 'pageSearch') {
+                document.getElementById('searchInput').value = '';
+                if (currentChapter !== '') {
+                    showPage('pageDetails');
+                } else {
+                    showPage('pageMain');
+                }
+            } else if (currentPage === 'pageDetails') {
+                currentChapter = '';
+                showPage('pageMain');
+            }
+        }
+
+        function goHome() {
+            document.getElementById('searchInput').value = '';
+            currentChapter = '';
+            showPage('pageMain');
+        }
+		function goHome() {
+    window.location.href = "cbreset.html";
+  }
+    </script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WGL-QAR Front Panel Task Table</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #111827; /* Dark Mode Background */
+            color: #e5e7eb;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px; /* Mobile Friendly Max Width */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 5px;
+        }
+
+        .header h1 {
+            font-size: 1.1rem;
+            color: #f3f4f6;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+		
+		.header-container {
+            width: 100%;
+            background-color: #1e293b;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            border-bottom: 2px solid #334155;
+        }
+
+        /* AMM Standard Table Style */
+        .amm-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1f2937;
+            border: 2px solid #4b5563;
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .amm-table th {
+            background-color: #374151;
+            color: #ffffff;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px;
+            border: 2px solid #4b5563;
+            letter-spacing: 0.5px;
+            width: 50%; /* 50/50 Split Grid */
+        }
+
+        .amm-table td {
+            padding: 10px;
+            border: 1px solid #4b5563;
+            vertical-align: top;
+        }
+
+        /* Inner list styles to replicate manual '-' */
+        .bullet-list {
+            list-style-type: none;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .bullet-list::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: bold;
+        }
+
+        /* Strong keywords highlighting */
+        b {
+            color: #3b82f6; /* Highlight button names in Blue */
+        }
+        
+        td b {
+            color: #60a5fa;
+        }
+
+        /* Display message styling */
+        .display-msg {
+            color: #34d399; /* Highlight screen results in Green */
+            font-weight: 600;
+        }
+
+        /* Note box adjustment inside table cell */
+        .note-container {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #2d2215;
+            border-left: 3px solid #f59e0b;
+            color: #fcd34d;
+            font-size: 0.82rem;
+            border-radius: 4px;
+        }
+
+        .note-container b {
+            color: #fbbf24;
+        }
+
+        /* Critical Warning Box inside table cell */
+        .warning-container {
+            margin-bottom: 8px;
+            padding: 8px;
+            background-color: #2d1a1a;
+            border-left: 3px solid #ef4444;
+            color: #fca5a5;
+            font-size: 0.82rem;
+            border-radius: 4px;
+        }
+
+        .warning-container b {
+            color: #f87171;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="header">
+        <h1>WGL-QAR DATA DELETE GUIDE (AMM)</h1>
+    </div>
+	
+	 
+	<div class="header-container">
+        <button onclick="goMain()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;\" onmousedown=\"this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';\" onmouseup=\"this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';\">Main</button>
+    </div>
+	
+
+    <table class="amm-table">
+        <thead>
+            <tr>
+                <th>ACTION</th>
+                <th>RESULT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #111827;">
+                <td>On the WGL-QAR Front Panel:</td>
+                <td>On the WGL-QAR Display:</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="bullet-list">Push the <b>MODE</b> button.</div>
+                </td>
+                <td>
+                    <div class="bullet-list"><span class="display-msg">SYSTEM STATE</span> comes into view.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="bullet-list">Push the <b>+</b> button again and again until the STATUS message comes into view.</div>
+                </td>
+                <td>
+                    <div class="bullet-list"><span class="display-msg">STATUS</span> comes into view.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="bullet-list">Push the <b>SEL</b> button.</div>
+                </td>
+                <td>
+                    <div class="bullet-list"><span class="display-msg">ACQUISITION</span> comes into view.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="bullet-list">Push the <b>+</b> button again and again until the CAPACITY message comes into view.</div>
+                </td>
+                <td>
+                    <div class="bullet-list"><span class="display-msg">CAPACITY</span> comes into view.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="bullet-list">Push the <b>SEL</b> button.</div>
+                </td>
+                <td>
+                    <div class="bullet-list"><span class="display-msg">RAW PERCENTAGE</span> comes into view.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="bullet-list">Push the <b>+</b> button until the RECYCLE EOF AND WGL FILES message comes into view.</div>
+                </td>
+                <td>
+                    <div class="bullet-list"><span class="display-msg">RECYCLE EOF AND WGL FILES</span> comes into view.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="bullet-list">Push the <b>SEL</b> button.</div>
+                </td>
+                <td>
+                    <div class="bullet-list"><span class="display-msg">RECORDING LOST + TO CONTINUE</span> comes into view.</div>
+                    <div class="note-container">
+                        <b>NOTE:</b> To prevent data-loss, you can push the <b>MODE</b> button at this time.
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="warning-container">
+                        <b>NOTE:</b> If you do the next step, all recorder data will be erased.
+                    </div>
+                    <div class="bullet-list">Push the <b>+</b> button.</div>
+                </td>
+                <td>
+                    <div class="bullet-list">The WGL-QAR reboots. After reboot the WGL-QAR, is ready for operation.</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
+
+
+	 <script>
+	function goMain() {
+    window.location.href = "Maintenance note.html";
+  }
+  </script>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duty & Time Calculator Tools</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 15px;
+            background: linear-gradient(145deg, #0d0f15, #1b1f2a, #111520);
+            color: white;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                        inset 0 0 12px rgba(255, 255, 255, 0.03);
+            align-self: flex-start;
+        }
+
+        /* ===== TAB SYSTEM ===== */
+        .tab-navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+		
+.header-container {
+            width: 100%;
+            background-color: #1e293b;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            border-bottom: 2px solid #334155;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .page-panel {
+            display: none;
+        }
+
+        .page-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #e2e8f0;
+        }
+
+        /* ===== COMMON FORMS & INPUTS ===== */
+        .row-flex {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .row-flex label {
+            min-width: 65px;
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #3b82f6;
+        }
+
+        .sub-btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 0;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.1s;
+        }
+
+        .btn-primary-mini {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary-mini:active { transform: scale(0.97); }
+
+        .btn-ghost-mini {
+            background: transparent;
+            color: #e5e7eb;
+            border: 1px solid #4b5563;
+        }
+
+        .btn-ghost-mini:active { background: rgba(255,255,255,0.05); }
+
+        /* ===== TIME CALCULATOR SPECIFIC ===== */
+        .result-text {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+
+        /* ===== DUTY ROSTER SPECIFIC ===== */
+        .duty-result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(15, 23, 42, 0.8);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .duty-result b {
+            color: #94a3b8;
+        }
+
+        .duty-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .duty-line:last-child { border-bottom: none; }
+        
+        .status-badge {
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+        .status-Day { color: #ffb703; background: rgba(255,183,3,0.1); }
+        .status-Night { color: #9b5de5; background: rgba(155,93,229,0.1); }
+        .status-Off { color: #f15bb5; background: rgba(241,91,181,0.1); }
+        .status-H-Duty { color: #00bbf9; background: rgba(0,187,249,0.1); }
+
+        .shift-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .shift-box {
+            border-radius: 12px;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .shift-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #66c2ff;
+            border-left: 3px solid #2563eb;
+            padding-left: 8px;
+        }
+
+        .shift-box ul {
+            padding-left: 20px;
+            margin: 0;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+        
+        .shift-box li { margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header-container">
+        <button onclick="goMain()" style="background: #0284c7; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; border-bottom: 4px solid #0369a1; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.1s;\" onmousedown=\"this.style.transform='translateY(2px)'; this.style.borderBottomWidth='2px'; this.style.boxShadow='0 2px 3px rgba(0,0,0,0.2)';\" onmouseup=\"this.style.transform='translateY(0)'; this.style.borderBottomWidth='4px'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.2)';\">Main</button>
+    </div>
+    
+    <div class="tab-navigation">
+        <button class="tab-btn active" onclick="switchTab('tab-duty')">📋 Duty Roster</button>
+        <button class="tab-btn" onclick="switchTab('tab-time')">⏱ Time Calc</button>
+    </div>
+
+    <div id="tab-duty" class="page-panel active">
+        <h2>Duty Roster System (A, B, C, D)</h2>
+
+        <div class="row-flex" style="justify-content: center; margin-bottom: 15px;">
+            <button class="sub-btn btn-primary-mini" style="width: 100%;" onclick="showTodayDuty()">Today's Duty</button>
+        </div>
+
+        <div class="row-flex">
+            <label>Select Date</label>
+            <input type="date" id="userDate">
+            <button class="sub-btn btn-ghost-mini" onclick="showSelectedDateDuty()">Check</button>
+        </div>
+
+        <div id="output" class="duty-result">
+            <div class="duty-line"><b>Date:</b> <span id="res-date">—</span></div>
+            <div class="duty-line"><b>Shift A:</b> <span id="res-A" class="status-badge">—</span></div>
+            <div class="duty-line"><b>Shift B:</b> <span id="res-B" class="status-badge">—</span></div>
+            <div class="duty-line"><b>Shift C:</b> <span id="res-C" class="status-badge">—</span></div>
+            <div class="duty-line"><b>Shift D:</b> <span id="res-D" class="status-badge">—</span></div>
+        </div>
+
+        <h3 style="font-size: 14px; margin-top: 20px; color: #94a3b8;">Staff Deployment List</h3>
+
+        <div class="shift-list">
+            <div class="shift-box">
+                <div class="shift-title">Shift A</div>
+                <ul>
+                     <li>Kyaw Zin Latt</li>
+					<li>Nyein Chan Ag</li>
+                    <li>Ag Thu Shein</li>
+                    <li>Htun Myat Soe</li>
+					<li>Driver - Ko Bay Gyi (09-975015115) </li>
+					     <li>Driver - Ko Kyaw Naing (09-970553853 / 09-951455566) </li>
+                </ul>
+            </div>
+
+            <div class="shift-box">
+                <div class="shift-title">Shift B</div>
+                <ul>
+                       <li>Kyaw Myo Htet</li>
+					<li>Zayar Ag</li>
+                    <li>Zin Lin Htet</li>
+                    <li>Myo Min Han</li>
+					   <li>Driver - Thant Zin (09-961595057) </li>
+					     <li>Driver - Kyaw Lin Pying (09-444421039) </li>
+                 
+                </ul>
+            </div>
+
+            <div class="shift-box">
+                <div class="shift-title">Shift C</div>
+                <ul>
+				     <li>Win Zaw Than</li>
+					<li>Phyo Ko Ko Hein</li>
+                    <li>Than Htet Win</li>
+                    <li>Ye Ag</li>
+					<li>Aung Win Hlaing</li>
+					<li>Driver - (09-961595057) </li>
+					     <li>Driver - (09-444421039) </li>
+                </ul>
+            </div>
+
+            <div class="shift-box">
+                <div class="shift-title">Shift D</div>
+                <ul>
+                    <li>Thet Naing</li>
+					<li>Hein Min Hlatt</li>
+                    <li>Ye Naing Oo</li>
+                    <li>Lin Htain Win</li>
+                    <li>Moe Paing Soe</li>
+					<li>Driver - Wai Moe Thant(09-254708661) </li>
+					     <li>Driver - Kya(09-403527979) </li>
+						  <li>Store- Nay Win Ag(09-43126576) </li>
+						   <li>Store - Bagyi Phyo(09-451130301) </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-time" class="page-panel">
+        <h2>Hours & Minutes Calculator</h2>
+
+        <div class="row-flex">
+            <label>Time A</label>
+            <input id="aHours" type="number" placeholder="Hours" />
+            <input id="aMinutes" type="number" placeholder="Minutes" />
+        </div>
+
+        <div class="row-flex">
+            <label>Time B</label>
+            <input id="bHours" type="number" placeholder="Hours" />
+            <input id="bMinutes" type="number" placeholder="Minutes" />
+        </div>
+
+        <div id="extraTimeRows"></div>
+
+        <div class="row-flex" style="justify-content: center; margin-top: 15px;">
+            <button class="sub-btn btn-ghost-mini" style="width: 100%;" onclick="addTimeRow()">➕ Add More Row</button>
+        </div>
+
+        <div class="row-flex" style="justify-content: space-between; margin-top: 15px;">
+            <button class="sub-btn btn-primary-mini" style="flex: 1;" id="addBtn">➕ Add</button>
+            <button class="sub-btn btn-primary-mini" style="flex: 1;" id="subBtn">➖ Subtract</button>
+            <button class="sub-btn btn-ghost-mini" style="flex: 0.8;" id="clearBtn">Clear</button>
+        </div>
+
+        <div id="result" class="result-text">Result: —</div>
+    </div>
+
+</div>
+
+<script>
+/* TAB SWITCHING LOGIC */
+function switchTab(tabId) {
+    document.querySelectorAll('.page-panel').forEach(panel => panel.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    
+    document.getElementById(tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+/* =============== TIME CALCULATOR LOGIC =============== */
+const el = id => document.getElementById(id);
+
+function toTotalMinutes(h, m) { return (Number(h) || 0) * 60 + (Number(m) || 0); }
+function format(total) {
+    const s = total < 0 ? '-' : '';
+    const a = Math.abs(total);
+    return `${s}${Math.floor(a / 60)} hr ${a % 60} min`;
+}
+
+let extraRowCount = 0;
+function addTimeRow() {
+    extraRowCount++;
+    const row = document.createElement("div");
+    row.className = "row-flex";
+    row.innerHTML = `
+        <label>Row ${extraRowCount}</label>
+        <input type="number" class="extraHours" placeholder="Hours" />
+        <input type="number" class="extraMinutes" placeholder="Minutes" />
+    `;
+    document.getElementById("extraTimeRows").appendChild(row);
+}
+
+document.getElementById("addBtn").onclick = () => {
+    let total = toTotalMinutes(el("aHours").value, el("aMinutes").value) +
+                toTotalMinutes(el("bHours").value, el("bMinutes").value);
+
+    const hrs = document.querySelectorAll(".extraHours");
+    const mins = document.querySelectorAll(".extraMinutes");
+    hrs.forEach((h, i) => {
+        total += toTotalMinutes(h.value, mins[i]?.value);
+    });
+    el("result").innerText = "Result: " + format(total);
+};
+
+document.getElementById("subBtn").onclick = () => {
+    let total = toTotalMinutes(el("aHours").value, el("aMinutes").value) -
+                toTotalMinutes(el("bHours").value, el("bMinutes").value);
+
+    const hrs = document.querySelectorAll(".extraHours");
+    const mins = document.querySelectorAll(".extraMinutes");
+    hrs.forEach((h, i) => {
+        total -= toTotalMinutes(h.value, mins[i]?.value);
+    });
+    el("result").innerText = "Result: " + format(total);
+};
+
+document.getElementById("clearBtn").onclick = () => {
+    ['aHours', 'aMinutes', 'bHours', 'bMinutes'].forEach(i => el(i).value = "");
+    document.getElementById("extraTimeRows").innerHTML = "";
+    extraRowCount = 0;
+    el("result").innerText = "Result: —";
+};
+
+/* =============== DUTY ROSTER LOGIC =============== */
+const baseDate = new Date("2025-11-18");
+const rotation = ["Day", "Night", "Off", "H-Duty"];
+
+function getDuty(date) {
+    const diff = Math.floor((date - baseDate) / (1000 * 60 * 60 * 24));
+    const index = ((diff % 4) + 4) % 4;
+
+    return {
+        A: rotation[index],
+        B: rotation[(index + 1) % 4],
+        C: rotation[(index + 2) % 4],
+        D: rotation[(index + 3) % 4]
+    };
+}
+
+function displayDuty(date, duty) {
+    const d = date.toISOString().split('T')[0];
+    document.getElementById("res-date").innerText = d;
+    
+    ['A', 'B', 'C', 'D'].forEach(shift => {
+        const target = document.getElementById(`res-${shift}`);
+        target.innerText = duty[shift];
+        target.className = `status-badge status-${duty[shift]}`;
+    });
+}
+
+function showTodayDuty() {
+    const today = new Date();
+    displayDuty(today, getDuty(today));
+}
+
+function showSelectedDateDuty() {
+    const val = document.getElementById("userDate").value;
+    if (!val) {
+        alert("Please select a date.");
+        return;
+    }
+    const date = new Date(val);
+    displayDuty(date, getDuty(date));
+}
+
+// ပထမဆုံးဝင်ဝင်ချင်း Today Duty ကို auto ပြထားပေးရန်
+showTodayDuty();
+
+
+
+	 function goMain() {
+    window.location.href = "index.html";
+}
+  
+
+</script>
+
+</body>
+</html>
